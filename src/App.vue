@@ -18,12 +18,18 @@ body {
 #app {
   font-family: 'Open Sans';
   font-family: 'Segoe UI';
-  background-color: #f4f4f4;
+  font-family: 'Lato';
+  font-family: 'Montserrat';
+  background-color: #fafafa;
   font-size: 14px;
   color: #1f1f1f;
   // background-color: red;
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
+}
+
+input[type=text] {
+  border-style: none;
 }
 </style>

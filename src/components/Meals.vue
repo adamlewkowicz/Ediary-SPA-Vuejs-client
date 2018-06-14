@@ -24,15 +24,33 @@
             <td>123</td>
             <td>123</td>
             <td>123</td>
+            <td>123</td>
+            <td>
+              <button class="btn-del-product">&#x2715;</button>
+            </td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              <product-searcher />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </section>
   </article>
 </template>
 
 <script>
+import ProductSearcher from '@/components/ProductSearcher';
+
 export default {
+  components: { ProductSearcher },
   data() {
     return {
       products: [
@@ -64,11 +82,13 @@ article {
     font-weight: normal;
   }
 }
+
 section {
   padding: 20px;
   background-color: #fff;
-  box-shadow: 0px 0px 20px -3px #d8d8d8;
+  box-shadow: 0px 0px 30px -10px #d8d8d8;
 }
+
 .meals-table {
   border-collapse: collapse;
   width: 100%;
@@ -86,9 +106,21 @@ section {
     }
     tr {
       &:nth-child(even) {
-        background-color: #f3f3f3;
+        background-color: #f7f7f7;
       }
     }
+  }
+}
+
+.btn-del-product {
+  @extend %clearBtn;
+  background-color: #e8e8e8;
+  border-radius: 30px;
+  width: 22px;
+  height: 22px;
+  &:hover {
+    background-color: #ff7675;
+    color: #fff;
   }
 }
 </style>

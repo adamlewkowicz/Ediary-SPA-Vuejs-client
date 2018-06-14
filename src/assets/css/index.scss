@@ -23,8 +23,19 @@
 }
 
 $ff: 'Source Sans Pro', sans-serif;
+$ff: 'Montserrat', sans-serif;
 $fs: 16px;
-$fsp: 14px;
+$fss: 14px;
+
+
+$testC: #e74c3c;
+
+%clearBtn {
+  border-style: none;
+  &:hover {
+    cursor: pointer;
+  }
+}
 
 .no-spinners {
 	-webkit-appearance: none;

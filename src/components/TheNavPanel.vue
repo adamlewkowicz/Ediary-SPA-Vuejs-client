@@ -43,6 +43,7 @@
   padding: 80px 0;
   box-sizing: border-box;
   position: fixed;
+  // box-shadow: -10px 30px 40px 10px #d8d8d8;
 }
 
 #nav {
