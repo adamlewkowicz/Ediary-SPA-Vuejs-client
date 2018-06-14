@@ -1,1 +1,38 @@
-$coler: #fff;
+@mixin desktop {
+	@media (min-width: 1200px) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (min-width: 768px) and (max-width: 979px) {
+		@content;
+	}
+}
+
+@mixin phone {
+	@media (max-width: 767px) {
+		@content;
+	}
+}
+
+@mixin small {
+	@media (max-width: 480px) {
+		@content;
+	}
+}
+
+$ff: 'Source Sans Pro', sans-serif;
+$fs: 16px;
+$fsp: 14px;
+
+.no-spinners {
+	-webkit-appearance: none;
+	-moz-appearance: textfield;
+  margin: 0;
+}
+
+// USAGE
+	// @include desktop {
+	//   font-size: 20px;
+	// }

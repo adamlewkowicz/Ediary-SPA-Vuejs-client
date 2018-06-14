@@ -1,23 +1,29 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'App'
 }
 </script>
 
 <style lang="scss">
+body {
+  margin: 0;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  color: $coler;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
+  font-family: 'Open Sans';
+  font-family: 'Segoe UI';
+  background-color: #f4f4f4;
+  font-size: 14px;
+  color: #1f1f1f;
+  // background-color: red;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

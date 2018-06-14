@@ -1,0 +1,29 @@
+<template>
+  <div>
+    <top-menu />
+    <nav-panel />
+    <section>
+      <h1>Dziennik</h1>
+      <router-view />
+    </section>
+  </div>
+</template>
+
+<script>
+import TopMenu from './../components/TheTopMenu.vue';
+import NavPanel from './../components/TheNavPanel.vue';
+
+export default {
+  components: { TopMenu, NavPanel },
+  mounted() {
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+section {
+  box-sizing: border-box;
+  margin-left: 200px;
+  padding: 50px;
+}
+</style>
