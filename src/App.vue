@@ -28,8 +28,4 @@ body {
   width: 100vw;
   height: 100vh;
 }
-
-input[type=text] {
-  border-style: none;
-}
 </style>

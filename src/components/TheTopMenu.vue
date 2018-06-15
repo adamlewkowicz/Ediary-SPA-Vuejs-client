@@ -3,15 +3,26 @@
     <div class="user">
     </div>
     Profil
-    <button class="btn">
+    <button class="btn" @click="redirect('profile')">
       <img src="./../assets/img/icons/person.png"/>
     </button>
     Ustawienia
-    <button class="btn">
+    <button class="btn" @click="redirect('settings')">
       <img src="./../assets/img/icons/settings.png"/>
     </button>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    redirect(route) {
+      this.$router.push(`/${route}`);
+    }
+  }
+}
+</script>
+
 
 <style lang="scss" scoped>
 #menu_wrapper {
@@ -35,6 +46,7 @@
   &:not(:last-child) {
     margin-right: 30px;
   }
+  outline: 0;
 }
 </style>
 
