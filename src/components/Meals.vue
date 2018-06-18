@@ -1,6 +1,29 @@
 <template>
   <article>
-    <h3>Zupa pomidorowa</h3>
+    <h3>
+      <form v-if="editName"
+        @submit.prevent="updateMeal({
+          meal: { name: $event.target.elements.newMealName.value },
+          mealKey,
+          mealId
+        }); editName = !editName"
+      >
+        <input type="text" :value="meal.name" name="newMealName">
+        <button type="submit">Zapisz</button>
+        <button type="button" @click="editName = !editName">Anuluj</button>
+      </form>
+      <div v-else>
+        {{ meal.name }}
+        <button @click="editName=!editName">e</button>
+      </div>
+    </h3>
+
+    <div>
+      <button @click="deleteMeal({ mealKey, mealId })">
+        Usuń posiłek
+      </button>
+    </div>
+
     <section>
       <table class="meals-table">
         <thead>
@@ -16,15 +39,15 @@
         </thead>
         <tbody>
           <tr
-            v-for="(product, productKey) in products"
+            v-for="(product, productKey) in meal.products"
             :key="productKey"
           >
             <td>{{ product.name }}</td>
             <td>{{ product.portionWeight }}</td>
-            <td>123</td>
-            <td>123</td>
-            <td>123</td>
-            <td>123</td>
+            <td>{{ product.carbs }}</td>
+            <td>{{ product.prots }}</td>
+            <td>{{ product.fats }}</td>
+            <td>{{ product.kcals }}</td>
             <td>
               <button class="btn-del-product">&#x2715;</button>
             </td>
@@ -47,18 +70,20 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import ProductSearcher from '@/components/ProductSearcher';
 
 export default {
   components: { ProductSearcher },
+  props: ['meal', 'mealKey', 'mealId'],
   data() {
     return {
-      products: [
-        { name: 'Brokuły', portionWeight: 91 },
-        { name: 'Ogórki', portionWeight: 13 },
-        { name: 'Masło', portionWeight: 39 }
-      ]
+      editName: false,
+      mealNejm: ''
     }
+  },
+  methods: {
+    ...mapActions(['updateMeal', 'deleteMeal'])
   }
 }
 </script>

@@ -23,25 +23,43 @@
       </div>
     </div>
 
-  <meals />
+  <meal-creator />
+
+  <meals
+    v-for="(meal, mealKey) in dailyMeals"
+    :key="mealKey"
+    :meal="meal"
+    :mealKey="mealKey"
+    :mealId="meal.id"
+  />
 
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment';
 import Meals from './../components/Meals';
+import MealCreator from './../components/MealCreator';
 
 export default {
-  components: { Meals },
+  components: { Meals, MealCreator },
   data() {
     return {
       meals: [],
       pickedDay: '',
-      pickedMonth: ''
+      pickedMonth: '',
+      pickedDate: ''
     }
   },
+  methods: {
+    ...mapActions(['getMeals'])
+  },
   computed: {
+    ...mapGetters(['weeklyMeals']),
+    dailyMeals() {
+      return this.weeklyMeals[this.pickedDate];
+    },
     renderDays() {
       const daysInMonth = moment().daysInMonth();
       const actualMonth = moment().format('MM');
@@ -65,11 +83,16 @@ export default {
         days.push({ day, month, selected });
       }
       return days;
+    },
+    dailyMealz() {
+      return this.$store.getters.dailyMeals('2018-06-13');
     }
   },
   created() {
     this.date = moment().format('DD-MM');
     this.pickedDay = moment().format('DD');
+    this.getMeals('2018-06-14');
+    this.pickedDate = moment().format('YYYY-MM-DD');
   }
 }
 </script>

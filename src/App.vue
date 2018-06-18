@@ -20,12 +20,17 @@ body {
   font-family: 'Segoe UI';
   font-family: 'Lato';
   font-family: 'Montserrat';
-  background-color: #fafafa;
+  // background-color: #fafafa;
   font-size: 14px;
   color: #1f1f1f;
   // background-color: red;
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
+}
+
+label {
+  margin: 7px 0;
+  display: block;
 }
 </style>

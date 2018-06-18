@@ -1,15 +1,19 @@
 <template>
   <div>
-    {{ el }}
+    <!-- {{ el.label }} -->
     <p><label :for="el.for">{{ el.label }}</label></p>
-    <input type="text" :id="el.for"/>
-    <button>Dodaj</button>
+    <input type="text" :id="el.for" v-model="name"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['el']
+  props: ['el'],
+  data() {
+    return {
+      name: ''
+    }
+  }
 }
 </script>
 
