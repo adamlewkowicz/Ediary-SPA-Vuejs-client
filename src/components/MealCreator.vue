@@ -67,6 +67,7 @@ export default {
       if (Object.values(this.meal).some(val => (val.length == 0) && (!val instanceof Array))) {
         this.errors.push('Proszę wypełnić wszystkie pola');
       } else {
+        this.creatorActive = false;
         this.$store.dispatch('addMeal', this.meal);
       }
     }

@@ -26,10 +26,10 @@
   <meal-creator />
 
   <meals
-    v-for="(meal, mealKey) in dailyMeals"
+    v-for="(meal, mealKey) in allMeals"
     :key="mealKey"
     :meal="meal"
-    :mealKey="mealKey"
+    :mealKey="meal.mealKey"
     :mealId="meal.id"
   />
 
@@ -56,8 +56,8 @@ export default {
     ...mapActions(['getMeals'])
   },
   computed: {
-    ...mapGetters(['weeklyMeals']),
-    dailyMeals() {
+    ...mapGetters(['weeklyMeals', 'pureMeals']),
+    allMeals() {
       return this.weeklyMeals[this.pickedDate];
     },
     renderDays() {
@@ -83,9 +83,6 @@ export default {
         days.push({ day, month, selected });
       }
       return days;
-    },
-    dailyMealz() {
-      return this.$store.getters.dailyMeals('2018-06-13');
     }
   },
   created() {
@@ -93,6 +90,7 @@ export default {
     this.pickedDay = moment().format('DD');
     this.getMeals('2018-06-18');
     this.pickedDate = moment().format('YYYY-MM-DD');
+    // this.pickedDate = '2018-06-19';
   }
 }
 </script>

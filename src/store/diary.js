@@ -59,8 +59,9 @@ const diary = {
       await axios.post(`/meals/${payload.mealId}/${id}`, { portionWeight });
     },
     async updateMealProduct ({ commit }, payload) {
-      commit('UPDATE_MEAL_PRODUCT', payload.product);
-      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`);
+      const { portionWeight } = payload.product;
+      commit('UPDATE_MEAL_PRODUCT', payload);
+      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, { portionWeight });
     },
     async deleteMealProduct ({ commit }, payload) {
       commit('DELETE_MEAL_PRODUCT', payload);
@@ -68,15 +69,16 @@ const diary = {
     }
   },
   getters: {
-    dailyMeals: state => day => {
-      return state.meals.filter(meal => {
-        return moment(meal.date, 'YYYY-MM-DD').diff(day, 'days') == 0;
-      });
-    },
+    // dailyMeals: state => day => {
+    //   return state.meals.filter(meal => {
+    //     return moment(meal.date, 'YYYY-MM-DD').diff(day, 'days') == 0;
+    //   });
+    // },
     calcedMeals: state => {
       const sumMacro = (macroName, array) => array.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
-      return state.meals.map(meal => ({
+      return state.meals.map((meal, index) => ({
         ...meal,
+        mealKey: index,
         products: [
           ...meal.products.map(product => {
             const weightScale = product.portionWeight / 100;
@@ -89,20 +91,22 @@ const diary = {
               kcals: scaleMacro(product.kcals)
             }
           })
-        ],
-        carbs: sumMacro('carbs', meal.products),
-        prots: sumMacro('prots', meal.products),
-        fats: sumMacro('fats', meal.products),
-        kcals: sumMacro('kcals', meal.products)
+        ]
+      })).map(meal => ({
+        ...meal,
+        carbs: sumMacro('carbs', meal.products)
       }));
     },
     weeklyMeals: (state, getters) => {
       return getters.calcedMeals.reduce((prev, current) => {
-        const date = moment(current.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD');
+        const date = moment(current.date, 'YYYY-MM-DD').add(0, 'day').format('YYYY-MM-DD');
         prev[date] = prev[date] || [];
         prev[date] = [...prev[date], current];
         return prev;
       }, {});
+    },
+    pureMeals: state => {
+      return state.meals;
     }
   }
 }

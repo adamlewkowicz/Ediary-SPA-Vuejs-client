@@ -43,13 +43,25 @@
             :key="productKey"
           >
             <td>{{ product.name }}</td>
-            <td>{{ product.portionWeight }}</td>
+            <td>
+              <input type="number" class="portion-weight"
+                :value="product.portionWeight"
+                @input="updateProdakt({
+                  mealKey, mealId, productKey,
+                  productId: product.id,
+                  product: { portionWeight: $event.target.value }
+                })"
+              />
+            </td>
             <td>{{ product.carbs }}</td>
             <td>{{ product.prots }}</td>
             <td>{{ product.fats }}</td>
             <td>{{ product.kcals }}</td>
             <td>
-              <button class="btn-del-product">&#x2715;</button>
+              <button class="btn-del-product"
+                @click="deleteMealProduct({
+                  mealKey, mealId, productKey, productId: product.id
+                })">&#x2715;</button>
             </td>
           </tr>
         </tbody>
@@ -75,6 +87,7 @@
 <script>
 import { mapActions } from 'vuex';
 import ProductSearcher from '@/components/ProductSearcher';
+import axios from 'axios';
 
 export default {
   components: { ProductSearcher },
@@ -82,11 +95,27 @@ export default {
   data() {
     return {
       editName: false,
-      mealNejm: ''
+      mealNejm: '',
+      timeOut: null,
+      timeOut2: null
     }
   },
   methods: {
-    ...mapActions(['updateMeal', 'deleteMeal'])
+    ...mapActions([
+      'updateMeal',
+      'deleteMeal',
+      'deleteMealProduct'
+    ]),
+    updateProdakt(payload) {
+      this.$store.commit('UPDATE_MEAL_PRODUCT', payload);
+    }
+    // updateMealProduct(payload) {
+    //   this.$store.commit('UPDATE_MEAL_PRODUCT', payload);
+    //   clearTimeout(this.timeOut);
+    //   this.timeOut = setTimeout(() => {
+    //     this.$store.dispatch('updateMealProduct', payload);
+    //   }, 500);
+    // },
   }
 }
 </script>
@@ -152,6 +181,17 @@ section {
     background-color: #ff7675;
     color: #fff;
   }
+}
+
+.portion-weight {
+  max-width: 50px;
+  text-align: center;
+  font-size: 14px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  font-family: $ff;
+  border-style: none;
+  border-bottom: 1px solid #d8d8d8;
 }
 </style>
 
