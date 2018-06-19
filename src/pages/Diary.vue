@@ -91,7 +91,7 @@ export default {
   created() {
     this.date = moment().format('DD-MM');
     this.pickedDay = moment().format('DD');
-    this.getMeals('2018-06-14');
+    this.getMeals('2018-06-18');
     this.pickedDate = moment().format('YYYY-MM-DD');
   }
 }

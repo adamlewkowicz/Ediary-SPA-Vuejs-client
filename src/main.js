@@ -6,8 +6,9 @@ import axios from 'axios';
 import router from './router';
 import { store } from './store/store';
 
+// Vue.use(axios);
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoic29rcmF0MzNzIiwicGVybWlzc2lvbnMiOjAsInZlcmlmaWVkIjowLCJpYXQiOjE1MjkzNTE1MTUsImV4cCI6MTUyOTM1ODcxNX0.LkWHihG7AcPV2oZeMKTRbPBRq6XDDh9eyb4LoOrshf8`;
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoic29rcmF0MzNzIiwicGVybWlzc2lvbnMiOjAsInZlcmlmaWVkIjowLCJpYXQiOjE1MjkzNzEwNDUsImV4cCI6MTUyOTM3ODI0NX0.UIy1GuDi7vhufda6uGtL8860_u_tlaRx1hZKcbObSuY`;
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -23,4 +24,4 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
-})
+});

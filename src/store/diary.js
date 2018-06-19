@@ -24,6 +24,17 @@ const diary = {
     },
     DELETE_MEAL (state, mealKey) {
       state.meals.splice(mealKey, 1);
+    },
+    ADD_MEAL_PRODUCT (state, payload) {
+      state.meals[payload.mealKey].products.push(payload.product);
+    },
+    UPDATE_MEAL_PRODUCT (state, payload) {
+      for (const prop in payload.product) {
+        state.meals[payload.mealKey].products[payload.productKey][prop] = payload.product[prop];
+      }
+    },
+    DELETE_MEAL_PRODUCT (state, payload) {
+      state.meals[payload.mealKey].products.splice(payload.productKey, 1);
     }
   },
   actions: {
@@ -41,6 +52,19 @@ const diary = {
     async deleteMeal ({ commit }, payload) {
       await axios.delete(`/meals/${payload.mealId}`);
       commit('DELETE_MEAL', payload.mealKey);
+    },
+    async addMealProduct ({ commit }, payload) {
+      const { id, portionWeight } = payload.product;
+      commit('ADD_MEAL_PRODUCT', payload);
+      await axios.post(`/meals/${payload.mealId}/${id}`, { portionWeight });
+    },
+    async updateMealProduct ({ commit }, payload) {
+      commit('UPDATE_MEAL_PRODUCT', payload.product);
+      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`);
+    },
+    async deleteMealProduct ({ commit }, payload) {
+      commit('DELETE_MEAL_PRODUCT', payload);
+      await axios.delete(`/meals/${payload.mealId}/${payload.productId}`)
     }
   },
   getters: {
@@ -50,8 +74,7 @@ const diary = {
       });
     },
     calcedMeals: state => {
-      console.log(state)
-      // if (!state.meals.length) return [];
+      const sumMacro = (macroName, array) => array.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
       return state.meals.map(meal => ({
         ...meal,
         products: [
@@ -66,12 +89,16 @@ const diary = {
               kcals: scaleMacro(product.kcals)
             }
           })
-        ]
+        ],
+        carbs: sumMacro('carbs', meal.products),
+        prots: sumMacro('prots', meal.products),
+        fats: sumMacro('fats', meal.products),
+        kcals: sumMacro('kcals', meal.products)
       }));
     },
     weeklyMeals: (state, getters) => {
       return getters.calcedMeals.reduce((prev, current) => {
-        const date = moment(current.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+        const date = moment(current.date, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD');
         prev[date] = prev[date] || [];
         prev[date] = [...prev[date], current];
         return prev;

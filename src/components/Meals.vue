@@ -56,12 +56,15 @@
         <tfoot>
           <tr>
             <td colspan="2">
-              <product-searcher />
+              <product-searcher
+                :mealKey="mealKey"
+                :mealId="mealId"
+              />
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ meal.carbs }}</td>
+            <td>{{ meal.prots }}</td>
+            <td>{{ meal.fats }}</td>
+            <td>{{ meal.kcals }}</td>
           </tr>
         </tfoot>
       </table>
@@ -124,14 +127,16 @@ section {
     }
   }
   tbody {
-    td {
-      &:not(:first-child) {
-        text-align: center;
-      }
-    }
     tr {
       &:nth-child(even) {
         background-color: #f7f7f7;
+      }
+    }
+  }
+  tfoot, tbody {
+    td {
+      &:not(:first-child) {
+        text-align: center;
       }
     }
   }
