@@ -8,10 +8,10 @@
       <p>Twoje dane:</p>
       <table>
         <tbody>
-          <tr><td>Wiek:</td> <td>{{ user.age }}</td></tr>
-          <tr><td>Waga:</td> <td>{{ user.weight }}</td></tr>
-          <tr><td>Wzrost:</td> <td>{{ user.height }}</td></tr>
-          <tr><td>Płeć:</td> <td>{{ user.man ? 'Mężczyzna' : 'Kobieta' }}</td></tr>
+          <tr><td>Wiek:</td> <td>{{ meas.age }}</td></tr>
+          <!-- <tr><td>Waga:</td> <td>{{ Number(meas.all.waga[0].value) }} kg</td></tr> -->
+          <tr><td>Wzrost:</td> <td>{{ meas.height }}</td></tr>
+          <tr><td>Płeć:</td> <td>{{ meas.man ? 'Mężczyzna' : 'Kobieta' }}</td></tr>
         </tbody>
       </table>
 
@@ -21,12 +21,33 @@
         <button type="submit">Dodaj pomiar</button>
       </form>
 
+      <div>
+        <table v-for="(measData, measProp) in meas.all" :key="measProp">
+          <thead>
+            <tr>
+              <th>{{ measProp }}</th>
+              <th>Wartość:</th>
+              <th>Data:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(singleMeas, singleMeasKey) in measData" :key="singleMeasKey">
+              <td>{{ singleMeas.name }}</td>
+              <td>{{ singleMeas.value }}</td>
+              <td>{{ singleMeas.date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
 
   </article>
 </template>
 
 <script>
+import moment from 'moment';
+import { mapState } from 'vuex';
 import FormElements from '@/components/FormElements';
 import UserData from '@/components/UserData';
 
@@ -42,7 +63,10 @@ export default {
         man: true
       }
     }
-  }
+  },
+  computed: mapState({
+    meas: state => state.measurements.general
+  })
 }
 </script>
 

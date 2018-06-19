@@ -75,7 +75,7 @@ const diary = {
     //   });
     // },
     calcedMeals: state => {
-      const sumMacro = (macroName, array) => array.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
+      const sumMacro = (macroName, products) => products.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
       return state.meals.map((meal, index) => ({
         ...meal,
         mealKey: index,
@@ -94,7 +94,10 @@ const diary = {
         ]
       })).map(meal => ({
         ...meal,
-        carbs: sumMacro('carbs', meal.products)
+        carbs: sumMacro('carbs', meal.products),
+        prots: sumMacro('prots', meal.products),
+        fats: sumMacro('fats', meal.products),
+        kcals: sumMacro('kcals', meal.products),
       }));
     },
     weeklyMeals: (state, getters) => {
@@ -104,9 +107,6 @@ const diary = {
         prev[date] = [...prev[date], current];
         return prev;
       }, {});
-    },
-    pureMeals: state => {
-      return state.meals;
     }
   }
 }

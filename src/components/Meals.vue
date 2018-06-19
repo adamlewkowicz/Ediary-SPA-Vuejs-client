@@ -19,6 +19,7 @@
     </h3>
 
     <div>
+      <p>ID: {{ mealId }}</p>
       <button @click="deleteMeal({ mealKey, mealId })">
         Usuń posiłek
       </button>
@@ -46,7 +47,7 @@
             <td>
               <input type="number" class="portion-weight"
                 :value="product.portionWeight"
-                @input="updateProdakt({
+                @input="updateMealProduct({
                   mealKey, mealId, productKey,
                   productId: product.id,
                   product: { portionWeight: $event.target.value }
@@ -95,7 +96,6 @@ export default {
   data() {
     return {
       editName: false,
-      mealNejm: '',
       timeOut: null,
       timeOut2: null
     }
@@ -106,16 +106,20 @@ export default {
       'deleteMeal',
       'deleteMealProduct'
     ]),
-    updateProdakt(payload) {
+    updateMealProduct(payload) {
       this.$store.commit('UPDATE_MEAL_PRODUCT', payload);
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.$store.dispatch('updateMealProduct', payload);
+      }, 1000);
     }
-    // updateMealProduct(payload) {
-    //   this.$store.commit('UPDATE_MEAL_PRODUCT', payload);
-    //   clearTimeout(this.timeOut);
-    //   this.timeOut = setTimeout(() => {
-    //     this.$store.dispatch('updateMealProduct', payload);
-    //   }, 500);
-    // },
+  },
+  watch: {
+    'meal.kcals' (val) {
+      const { carbs, prots, fats, kcals } = this.meal;
+      clearTimeout(this.timeOut2);
+      this.timeOut2 = setTimeout(() => axios.patch(`/meals/${this.mealId}`, { carbs, prots, fats, kcals }), 2000);
+    }
   }
 }
 </script>

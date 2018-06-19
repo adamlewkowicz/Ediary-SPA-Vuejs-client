@@ -10,12 +10,18 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import TopMenu from './../components/TheTopMenu.vue';
 import NavPanel from './../components/TheNavPanel.vue';
 
+
 export default {
   components: { TopMenu, NavPanel },
-  mounted() {
+  methods: {
+    ...mapActions(['getMeas'])
+  },
+  created() {
+    this.getMeas();
   }
 }
 </script>
