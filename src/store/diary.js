@@ -9,13 +9,20 @@ const sleep = (ms, variable) => new Promise(resolve => {
   variable = setTimeout(resolve, ms);
 });
 
-const sleep2 = (ms, fn) => new Promise(resolve => {
-  let timeout = null;
-  clearTimeout(timeout);
-  timeout = setTimeout(async () => {
+const sleep2 = (ms = 1000, variable, fn) => new Promise(resolve => {
+  clearTimeout(variable);
+  variable = setTimeout(async () => {
     await fn();
+    resolve();
   }, ms);
 });
+
+const sleep3 = (ms = 1000, variable, fn) => {
+  clearTimeout(variable);
+  variable = setTimeout(async () => {
+    await fn();
+  }, ms);
+};
 
 const diary = {
   state: {
@@ -79,9 +86,10 @@ const diary = {
     },
     async updateMealProduct ({ commit }, payload) {
       commit('UPDATE_MEAL_PRODUCT', payload);
-      // await sleep(1000, timeOut1);
-      sleep2(1000, async () => await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product));
-      // await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product);
+      clearTimeout(timeOut1);
+      timeOut1 = setTimeout(async () => {
+        await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product);
+      }, 1000);
     },
     async deleteMealProduct ({ commit }, payload) {
       commit('DELETE_MEAL_PRODUCT', payload);

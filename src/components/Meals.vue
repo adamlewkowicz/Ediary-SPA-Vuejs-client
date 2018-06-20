@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h3>
+    <h3 class="meal-name" :class="{ 'animated-bar': editName }">
       <form v-if="editName"
         @submit.prevent="updateMeal({
           meal: { name: $event.target.elements.newMealName.value },
@@ -8,7 +8,7 @@
           mealId
         }); editName = !editName"
       >
-        <input type="text" :value="meal.name" name="newMealName">
+        <input type="text" :value="meal.name" name="newMealName" class="edit-meal-name">
         <button type="submit">Zapisz</button>
         <button type="button" @click="editName = !editName">Anuluj</button>
       </form>
@@ -130,19 +130,56 @@ export default {
 article {
   margin-top: 50px;
   position: relative;
-  &:before {
+  h3 {
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-weight: normal;
+  }
+}
+
+.meal-name {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 30px;
+  // margin: 0px 0px 30px 0;
+  &:after {
     content: "";
     height: 4px;
     width: 110px;
     background-color: rgba(46,204,113, .4);
     position: absolute;
-    top: 26px;
+    top: 28px;
     border-radius: 5px;
   }
-  h3 {
-    margin-bottom: 25px;
-    font-size: 20px;
-    font-weight: normal;
+}
+
+.animated-bar {
+  &:after {
+    background: linear-gradient(to right,rgba(137, 247, 254, .5), rgba(102, 166, 255, .5));
+    background-size: 200% 200%;
+    animation: bar 1s ease infinite;
+    // height: 40px;
+  }
+}
+
+.edit-meal-name {
+  min-width: 250px;
+  position: relative;
+  top: 4px;
+  font-size: 20px;
+  font-family: $ff;
+  padding: 0;
+}
+
+@keyframes bar {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 

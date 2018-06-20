@@ -57,8 +57,12 @@ export default {
       errors: []
     }
   },
-  created() {
-    this.meal.date = moment().format('YYYY-MM-DD HH:mm:ss');
+  watch: {
+    creatorActive (status) {
+      if (status == true) {
+        this.meal.date = this.pickedDate + ' ' + moment().format('HH:mm:ss');
+      }
+    }
   },
   methods: {
     addMeal() {
@@ -70,6 +74,11 @@ export default {
         this.creatorActive = false;
         this.$store.dispatch('addMeal', this.meal);
       }
+    }
+  },
+  computed: {
+    pickedDate() {
+      return this.$store.state.date.picked;
     }
   }
 }

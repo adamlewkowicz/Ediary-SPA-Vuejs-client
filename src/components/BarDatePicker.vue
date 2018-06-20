@@ -1,17 +1,19 @@
 <template>
   <div class="datepicker">
-    <div
-      class="day"
-      v-for="(day, dayKey) in week"
-      :key="dayKey"
-      :class="{ 'selected-day' : day.selected }"
-      @click="PICKED_DATE(day.date)"
-    >
-      <div v-if="mealsMacro[day.date]" class="dot-overlap">
-        {{ parseInt(mealsMacro[day.date].kcals) }}
+    <button @click="DECREASE_PICKED_WEEK"><</button>
+      <div
+        class="day"
+        v-for="(day, dayKey) in week"
+        :key="dayKey"
+        :class="{ 'selected-day' : day.selected }"
+        @click="CHANGE_PICKED_DATE(day.date)"
+      >
+        <div v-if="mealsMacro[day.date]" class="dot-overlap">
+          {{ parseInt(mealsMacro[day.date].kcals) }}
+        </div>
+        {{ day.day }}
       </div>
-      {{ day.day }}
-    </div>
+    <button @click="INCREASE_PICKED_WEEK">></button>
   </div>
 </template>
 
@@ -21,7 +23,11 @@ import moment from 'moment';
 export default {
   props: ['mealsMacro'],
   methods: {
-    ...mapMutations(['PICKED_DATE'])
+    ...mapMutations([
+      'CHANGE_PICKED_DATE',
+      'DECREASE_PICKED_WEEK',
+      'INCREASE_PICKED_WEEK'
+    ])
   },
   computed: {
     date () {
@@ -58,9 +64,10 @@ export default {
   width: 100%;
   text-align: center;
   position: relative;
+  border-bottom: 2px solid #ffffff;
   &:hover {
     cursor: pointer;
-    border-bottom: 2px solid #d6d6d6;
+    border-color: #d6d6d6;
   }
 }
 
@@ -71,13 +78,13 @@ export default {
 .dot-overlap {
   background-color: #27ae60;
   color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   position: absolute;
   height: 16px;
   top: 4px;
   right: 4px;
   font-size: 11px;
-  padding: 0px 4px;
+  padding: 1px 5px 0 4px;
 }
 </style>
 

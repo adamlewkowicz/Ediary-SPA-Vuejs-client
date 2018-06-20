@@ -53,16 +53,20 @@ export default {
     pickedDate () {
       return this.$store.state.date.picked;
     },
+    pickedWeek () {
+      return this.$store.state.date.pickedWeek;
+    },
     todaysMeals() {
       return this.weeklyMeals[this.pickedDate] || [];
     }
   },
   created() {
-    // this.date = moment().format('DD-MM');
-    // this.pickedDay = moment().format('DD');
-    this.getMeals('2018-06-18');
-    // this.pickedDate = moment().format('YYYY-MM-DD');
-    // this.pickedDate = '2018-06-19';
+    this.getMeals(this.pickedDate);
+  },
+  watch: {
+    pickedWeek () {
+      this.getMeals(this.pickedDate);
+    }
   }
 }
 </script>
