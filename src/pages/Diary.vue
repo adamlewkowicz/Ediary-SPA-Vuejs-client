@@ -1,10 +1,18 @@
 <template>
   <div>
+
     <bar-date-picker
       :mealsMacro="weeklyMealsMacro"
     />
 
-    <meal-creator />
+    <div>
+      <center>
+        <p><meal-creator /></p>
+        <p v-if="!todaysMeals.length">
+          Brak posiłków w dniu: {{ pickedDate }}
+        </p>
+      </center>
+    </div>
 
     <meals
       v-for="(meal, mealKey) in todaysMeals"
@@ -46,7 +54,7 @@ export default {
       return this.$store.state.date.picked;
     },
     todaysMeals() {
-      return this.weeklyMeals[this.pickedDate];
+      return this.weeklyMeals[this.pickedDate] || [];
     }
   },
   created() {

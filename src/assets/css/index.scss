@@ -27,6 +27,7 @@ $ff: 'Montserrat', sans-serif;
 $fs: 16px;
 $fss: 14px;
 
+$icoUrl: './../assets/img/icons/';
 
 $testC: #e74c3c;
 
@@ -64,3 +65,16 @@ input[type=text] {
 	// @include desktop {
 	//   font-size: 20px;
 	// }
+
+
+.btn-del-product {
+  @extend %clearBtn;
+  background-color: #e8e8e8;
+  border-radius: 30px;
+  width: 22px;
+  height: 22px;
+  &:hover {
+    background-color: #ff7675;
+    color: #fff;
+  }
+}

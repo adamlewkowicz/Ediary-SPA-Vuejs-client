@@ -46,10 +46,11 @@ export default {
       const payload = { mealKey, mealId };
       const productFound = this.products[productKey];
       if (!productFound.fetched) {
-        payload.product = await postProduct(productFound.url);
+        payload.product = await this.postProduct(productFound.url);
       } else {
         payload.product = productFound;
       }
+      payload.product.showDetails = false;
       this.checkDuplicates({
         ...payload,
         productId: payload.product.id
@@ -58,7 +59,8 @@ export default {
       this.productName = '';
     },
     async postProduct (url) {
-      return { data: { product }} = await axios.post(`/products/ilewazy`, { url });
+      const { data: { product }} = await axios.post(`/products/ilewazy`, { url });
+      return { ...product, showDetails: false };
     },
     checkDuplicates (payload) {
       const productIndex = this.meal.products.findIndex(product => product.id == payload.productId);

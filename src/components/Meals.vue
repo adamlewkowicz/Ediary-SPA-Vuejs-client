@@ -14,15 +14,16 @@
       </form>
       <div v-else>
         {{ meal.name }}
-        <button @click="editName=!editName">e</button>
+        <button
+          @click="editName=!editName"
+          class="edit-name-btn"
+        ></button>
       </div>
     </h3>
 
     <div>
-      <p>ID: {{ mealId }}</p>
-      <button @click="deleteMeal({ mealKey, mealId })">
-        Usuń posiłek
-      </button>
+      <!-- <p>ID: {{ mealId }}</p> -->
+
     </div>
 
     <section>
@@ -39,32 +40,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr
+          <meals-products
             v-for="(product, productKey) in meal.products"
             :key="productKey"
-          >
-            <td>{{ product.name }}</td>
-            <td>
-              <input type="number" class="portion-weight"
-                :value="product.portionWeight"
-                @input="updateMealProduct({
-                  mealKey, mealId, productKey,
-                  productId: product.id,
-                  product: { portionWeight: $event.target.value }
-                })"
-              />
-            </td>
-            <td>{{ product.carbs }}</td>
-            <td>{{ product.prots }}</td>
-            <td>{{ product.fats }}</td>
-            <td>{{ product.kcals }}</td>
-            <td>
-              <button class="btn-del-product"
-                @click="deleteMealProduct({
-                  mealKey, mealId, productKey, productId: product.id
-                })">&#x2715;</button>
-            </td>
-          </tr>
+            :product="product"
+            :mealKey="mealKey"
+            :mealId="mealId"
+            :productKey="productKey"
+            :productId="product.id"
+          />
         </tbody>
         <tfoot>
           <tr>
@@ -79,6 +63,12 @@
             <td>{{ macro.prots }}</td>
             <td>{{ macro.fats }}</td>
             <td>{{ macro.kcals }}</td>
+            <td>
+              <button
+                @click="deleteMeal({ mealKey, mealId })"
+                class="btn-del-product"
+              >&#x2715;</button>
+            </td>
           </tr>
         </tfoot>
       </table>
@@ -88,11 +78,15 @@
 
 <script>
 import { mapActions } from 'vuex';
-import ProductSearcher from '@/components/ProductSearcher';
 import axios from 'axios';
+import MealsProducts from '@/components/MealsProducts';
+import ProductSearcher from '@/components/ProductSearcher';
 
 export default {
-  components: { ProductSearcher },
+  components: {
+    MealsProducts,
+    ProductSearcher
+  },
   props: ['meal', 'mealKey', 'mealId'],
   data() {
     return {
@@ -142,7 +136,7 @@ article {
     width: 110px;
     background-color: rgba(46,204,113, .4);
     position: absolute;
-    top: 23px;
+    top: 26px;
     border-radius: 5px;
   }
   h3 {
@@ -150,6 +144,17 @@ article {
     font-size: 20px;
     font-weight: normal;
   }
+}
+
+.edit-name-btn {
+  @extend %clearBtn;
+  background: url($icoUrl + "pencil.png") center no-repeat;
+  background-size: 16px 16px;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  top: 4px;
+  margin-left: 10px;
 }
 
 section {
@@ -170,7 +175,7 @@ section {
   tbody {
     tr {
       &:nth-child(even) {
-        background-color: #f7f7f7;
+        background-color: #f9f9f9;
       }
     }
   }
@@ -181,29 +186,6 @@ section {
       }
     }
   }
-}
-
-.btn-del-product {
-  @extend %clearBtn;
-  background-color: #e8e8e8;
-  border-radius: 30px;
-  width: 22px;
-  height: 22px;
-  &:hover {
-    background-color: #ff7675;
-    color: #fff;
-  }
-}
-
-.portion-weight {
-  max-width: 50px;
-  text-align: center;
-  font-size: 14px;
-  padding-left: 10px;
-  box-sizing: border-box;
-  font-family: $ff;
-  border-style: none;
-  border-bottom: 1px solid #d8d8d8;
 }
 </style>
 

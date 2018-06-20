@@ -23,7 +23,13 @@ const diary = {
   },
   mutations: {
     GET_MEALS (state, payload) {
-      state.meals = payload.data.meals;
+      state.meals = payload.data.meals.map(meal => ({
+        ...meal,
+        products: meal.products.map(product => ({
+          ...product,
+          showDetails: false
+        }))
+      }));
     },
     ADD_MEAL (state, payload) {
       console.log(payload)
@@ -83,11 +89,6 @@ const diary = {
     }
   },
   getters: {
-    // dailyMeals: state => day => {
-    //   return state.meals.filter(meal => {
-    //     return moment(meal.date, 'YYYY-MM-DD').diff(day, 'days') == 0;
-    //   });
-    // },
     calcedMeals: state => {
       const sumMacro = (macroName, products) => products.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
       return state.meals.map((meal, index) => ({
