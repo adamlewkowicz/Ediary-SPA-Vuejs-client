@@ -9,6 +9,14 @@ const sleep = (ms, variable) => new Promise(resolve => {
   variable = setTimeout(resolve, ms);
 });
 
+const sleep2 = (ms, fn) => new Promise(resolve => {
+  let timeout = null;
+  clearTimeout(timeout);
+  timeout = setTimeout(async () => {
+    await fn();
+  }, ms);
+});
+
 const diary = {
   state: {
     meals: [],
@@ -60,16 +68,14 @@ const diary = {
     },
     async addMealProduct ({ commit, state }, payload) {
       const { mealKey, mealId, product: { id: productId, portionWeight }} = payload;
-      const wat = state.meals[mealKey].products.find(product => product.id == productId);
-      console.log(wat)
       commit('ADD_MEAL_PRODUCT', payload);
       await axios.post(`/meals/${payload.mealId}/${productId}`, { portionWeight });
     },
     async updateMealProduct ({ commit }, payload) {
-      // const { portionWeight } = payload.product;
       commit('UPDATE_MEAL_PRODUCT', payload);
-      await sleep(1000, timeOut1);
-      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product);
+      // await sleep(1000, timeOut1);
+      sleep2(1000, async () => await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product));
+      // await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product);
     },
     async deleteMealProduct ({ commit }, payload) {
       commit('DELETE_MEAL_PRODUCT', payload);
@@ -115,6 +121,16 @@ const diary = {
         prev[date] = [...prev[date], current];
         return prev;
       }, {});
+    },
+    weeklyMealsMacro: (state, getters) => {
+      const weeklyM = getters.weeklyMeals;
+      return Object.keys(weeklyM).reduce((meals, mealDate) => ({
+        ...meals,
+        [mealDate]: weeklyM[mealDate].reduce((macro, meal) => ({
+          ...macro,
+          kcals: macro.kcals += meal.kcals
+        }), { kcals: 0 })
+      }), {});
     }
   }
 }

@@ -7,8 +7,8 @@ const roundNum = val => Math.round(val * 100) / 100;
 const measurements = {
   state: {
     general: {},
-    weight: 68,
-    bodyFat: 0.16
+    weight: 64.8,
+    bodyFat: 13.3 / 100
   },
   mutations: {
     GET_MEAS (state, payload) {
@@ -31,7 +31,7 @@ const measurements = {
       calcMacro.kcals = calcMacro.carbs * 4 + calcMacro.prots * 4 + calcMacro.fats * 9
       return calcMacro
     },
-    LBM: state => (1 - state.bodyFat) * state.weight,
+    LBM: state => roundNum((1 - state.bodyFat) * state.weight),
     BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),
     TDEE: (state, getters) => roundNum(getters.BMR * 1.2)
   }

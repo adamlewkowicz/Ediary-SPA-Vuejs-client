@@ -62,6 +62,7 @@ export default {
     },
     checkDuplicates (payload) {
       const productIndex = this.meal.products.findIndex(product => product.id == payload.productId);
+
       if (productIndex > -1) {
         const productFound = this.meal.products[productIndex];
         const sumPortion = productFound.portionWeight + payload.product.portionWeight;

@@ -112,7 +112,7 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.$store.dispatch('updateMealProduct', payload);
-      }, 1000);
+      }, 0);
     }
   },
   watch: {
