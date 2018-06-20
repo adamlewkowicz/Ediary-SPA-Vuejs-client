@@ -9,7 +9,7 @@
       <table>
         <tbody>
           <tr><td>Wiek:</td> <td>{{ meas.age }}</td></tr>
-          <!-- <tr><td>Waga:</td> <td>{{ Number(meas.all.waga[0].value) }} kg</td></tr> -->
+          <!-- <tr><td>Waga:</td> <td>{{ Number(meas.all.waga[0].value) }} kg</td></tr>w -->
           <tr><td>Wzrost:</td> <td>{{ meas.height }}</td></tr>
           <tr><td>Płeć:</td> <td>{{ meas.man ? 'Mężczyzna' : 'Kobieta' }}</td></tr>
         </tbody>

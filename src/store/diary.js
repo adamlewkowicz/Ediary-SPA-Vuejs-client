@@ -3,10 +3,15 @@ import axios from 'axios';
 import moment from 'moment';
 
 const roundNum = val => Math.round(val * 10) / 10;
+let timeOut1 = null;
+const sleep = (ms, variable) => new Promise(resolve => {
+  clearTimeout(variable);
+  variable = setTimeout(resolve, ms);
+});
 
 const diary = {
   state: {
-    meals: []
+    meals: [],
   },
   mutations: {
     GET_MEALS (state, payload) {
@@ -53,15 +58,18 @@ const diary = {
       await axios.delete(`/meals/${payload.mealId}`);
       commit('DELETE_MEAL', payload.mealKey);
     },
-    async addMealProduct ({ commit }, payload) {
-      const { id, portionWeight } = payload.product;
+    async addMealProduct ({ commit, state }, payload) {
+      const { mealKey, mealId, product: { id: productId, portionWeight }} = payload;
+      const wat = state.meals[mealKey].products.find(product => product.id == productId);
+      console.log(wat)
       commit('ADD_MEAL_PRODUCT', payload);
-      await axios.post(`/meals/${payload.mealId}/${id}`, { portionWeight });
+      await axios.post(`/meals/${payload.mealId}/${productId}`, { portionWeight });
     },
     async updateMealProduct ({ commit }, payload) {
-      const { portionWeight } = payload.product;
+      // const { portionWeight } = payload.product;
       commit('UPDATE_MEAL_PRODUCT', payload);
-      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, { portionWeight });
+      await sleep(1000, timeOut1);
+      await axios.patch(`/meals/${payload.mealId}/${payload.productId}`, payload.product);
     },
     async deleteMealProduct ({ commit }, payload) {
       commit('DELETE_MEAL_PRODUCT', payload);

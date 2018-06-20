@@ -72,12 +72,13 @@
               <product-searcher
                 :mealKey="mealKey"
                 :mealId="mealId"
+                :meal="meal"
               />
             </td>
-            <td>{{ meal.carbs }}</td>
-            <td>{{ meal.prots }}</td>
-            <td>{{ meal.fats }}</td>
-            <td>{{ meal.kcals }}</td>
+            <td>{{ macro.carbs }}</td>
+            <td>{{ macro.prots }}</td>
+            <td>{{ macro.fats }}</td>
+            <td>{{ macro.kcals }}</td>
           </tr>
         </tfoot>
       </table>
@@ -119,6 +120,13 @@ export default {
       const { carbs, prots, fats, kcals } = this.meal;
       clearTimeout(this.timeOut2);
       this.timeOut2 = setTimeout(() => axios.patch(`/meals/${this.mealId}`, { carbs, prots, fats, kcals }), 2000);
+    }
+  },
+  computed: {
+    macro () {
+      const { carbs, prots, fats, kcals } = this.meal;
+      if (kcals == 0) return {};
+      else return { carbs, prots, fats, kcals };
     }
   }
 }

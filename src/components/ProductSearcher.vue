@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
-  props: ['mealKey', 'mealId'],
+  props: ['mealKey', 'mealId', 'meal'],
   data() {
     return {
       productName: '',
@@ -32,25 +32,49 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addMealProduct']),
+    ...mapActions(['addMealProduct', 'updateMealProduct']),
     delayInput() {
       clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => this.getProducts(),200);
+      this.timeOut = setTimeout(() => this.getProducts(), 200);
     },
     async getProducts() {
       const { data: { products }} = await axios.get(`/products/ilewazy/${this.productName}`);
       this.products = products;
     },
-    async addProduct(productKey) {
+    async addProduct (productKey) {
       const { mealKey, mealId } = this;
-      const product = this.products[productKey];
-      if (product.fetched) {
-        this.addMealProduct({ mealKey, mealId, product });
+      const payload = { mealKey, mealId };
+      const productFound = this.products[productKey];
+      if (!productFound.fetched) {
+        payload.product = await postProduct(productFound.url);
       } else {
-        const { data: { product: newProduct }} = await axios.post(`/products/ilewazy`, { url: product.url })
-        this.addMealProduct({ mealKey, mealId, product: newProduct });
+        payload.product = productFound;
       }
+      this.checkDuplicates({
+        ...payload,
+        productId: payload.product.id
+      });
       this.products = [];
+      this.productName = '';
+    },
+    async postProduct (url) {
+      return { data: { product }} = await axios.post(`/products/ilewazy`, { url });
+    },
+    checkDuplicates (payload) {
+      const productIndex = this.meal.products.findIndex(product => product.id == payload.productId);
+      if (productIndex > -1) {
+        const productFound = this.meal.products[productIndex];
+        const sumPortion = productFound.portionWeight + payload.product.portionWeight;
+        this.updateMealProduct({
+          ...payload,
+          productKey: productIndex,
+          product: {
+            portionWeight: sumPortion
+          }
+        });
+      } else {
+        this.addMealProduct(payload);
+      }
     }
   }
 }
