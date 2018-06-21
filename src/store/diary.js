@@ -137,8 +137,8 @@ const diary = {
         ...meals,
         [mealDate]: weeklyM[mealDate].reduce((macro, meal) => ({
           ...macro,
-          kcals: macro.kcals += meal.kcals
-        }), { kcals: 0 })
+          value: macro.value += meal.kcals
+        }), { value: 0 })
       }), {});
     }
   }

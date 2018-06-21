@@ -2,7 +2,7 @@
   <div>
 
     <bar-date-picker
-      :mealsMacro="weeklyMealsMacro"
+      :overlapSet="weeklyMealsMacro"
     />
 
     <div>

@@ -23,7 +23,6 @@
 
     <div>
       <!-- <p>ID: {{ mealId }}</p> -->
-
     </div>
 
     <section>

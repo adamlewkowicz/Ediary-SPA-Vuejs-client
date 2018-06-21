@@ -26,10 +26,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 section {
   box-sizing: border-box;
   margin-left: 200px;
   padding: 50px;
+}
+
+input[type=text] {
+  @extend %input;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
 }
 </style>

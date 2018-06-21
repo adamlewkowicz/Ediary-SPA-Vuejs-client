@@ -8,8 +8,8 @@
         :class="{ 'selected-day' : day.selected }"
         @click="CHANGE_PICKED_DATE(day.date)"
       >
-        <div v-if="mealsMacro[day.date]" class="dot-overlap">
-          {{ parseInt(mealsMacro[day.date].kcals) }}
+        <div v-if="overlapSet[day.date]" class="dot-overlap">
+          {{ parseInt(overlapSet[day.date].value) }}
         </div>
         {{ day.day }}
       </div>
@@ -21,7 +21,14 @@
 import { mapMutations } from 'vuex';
 import moment from 'moment';
 export default {
-  props: ['mealsMacro'],
+  props: {
+    overlapSet: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
   methods: {
     ...mapMutations([
       'CHANGE_PICKED_DATE',
@@ -56,6 +63,7 @@ export default {
   // background-color: #333333;
   display: flex;
   justify-content: space-around;
+  margin-bottom: 40px;
 }
 
 .day {

@@ -24,7 +24,7 @@
 
 $ff: 'Source Sans Pro', sans-serif;
 $ff: 'Montserrat', sans-serif;
-$fs: 16px;
+$fs: 14px;
 $fss: 14px;
 
 $icoUrl: './../assets/img/icons/';
@@ -37,6 +37,7 @@ $testC: #e74c3c;
     cursor: pointer;
   }
   font-family: $ff;
+  font-size: $fs;
 }
 
 input[type=text] {
