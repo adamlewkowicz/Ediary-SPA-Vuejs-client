@@ -2,7 +2,7 @@
   <div>
     <top-menu />
     <nav-panel />
-    <section>
+    <section id="page-wrapper">
       <h1>Dziennik</h1>
       <router-view />
     </section>
@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style lang="scss">
-section {
+#page-wrapper {
   box-sizing: border-box;
   margin-left: 200px;
   padding: 50px;

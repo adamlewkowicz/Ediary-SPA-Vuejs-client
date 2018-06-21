@@ -15,9 +15,15 @@ const training = {
     ADD_EXERCISE_SET (state, payload) {
       state.exercises[payload.exerciseKey].sets.push(payload.set);
     },
+    UPDATE_EXERCISE_SET (state, payload) {
+      const { exerciseKey, setKey } = payload;
+      for (const prop in payload.set) {
+        state.exercises[exerciseKey].sets[setKey][prop] = payload.set[prop];
+      }
+    },
     DELETE_EXERCISE_SET (state, payload) {
       const { exerciseKey, setKey } = payload;
-      state.exercises[exerciseKey].sets[setKey].splice(setKey, 1);
+      state.exercises[exerciseKey].sets.splice(setKey, 1);
     }
   },
   actions: {
@@ -36,6 +42,10 @@ const training = {
       const { data: { id }} = await axios.post(`/trainings/${payload.exerciseId}`, payload.set);
       payload.set.id = id;
       commit('ADD_EXERCISE_SET', payload);
+    },
+    async updateExerciseSet ({ commit }, payload) {
+      commit('UPDATE_EXERCISE_SET', payload);
+      await axios.patch(`/trainings/${payload.exerciseId}/${payload.setId}`, payload.set);
     },
     async deleteExerciseSet ({ commit }, payload) {
       commit('DELETE_EXERCISE_SET', payload);

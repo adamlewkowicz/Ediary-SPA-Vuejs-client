@@ -1,16 +1,23 @@
 <template>
-  <div>
+  <div class="exercise-wrapper">
     <p>{{ exercise.name }}</p>
     <table>
       <thead>
         <th>Seria</th>
-        <th>Obciążenie</th>
         <th>Powtórzenia</th>
+        <th>Obciążenie</th>
         <th>Usuń</th>
       </thead>
       <tbody>
-        <tr>
-        </tr>
+        <exercises-sets
+          v-for="(set, setKey) in exercise.sets"
+          :key="setKey"
+          :exerciseKey="exerciseKey"
+          :exerciseId="exerciseId"
+          :setKey="setKey"
+          :setId="set.id"
+          :set="set"
+        />
       </tbody>
       <tfoot>
         <button @click="addExerciseSet">
@@ -28,9 +35,13 @@
 
 <script>
 import { mapActions } from 'vuex';
+import ExercisesSets from '@/components/ExercisesSets';
 
 export default {
   props: ['exerciseKey', 'exerciseId', 'exercise'],
+  components: {
+    ExercisesSets
+  },
   computed: {
     meta () {
       return {
@@ -53,3 +64,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.exercise-wrapper {
+  margin-top: 50px;
+}
+</style>
+
