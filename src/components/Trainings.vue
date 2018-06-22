@@ -33,6 +33,7 @@
     </table>
     <div v-if="exerciseFinished" class="finished">
       Ćwiczenie ukończone!
+      <!-- {{ }} -->
     </div>
   </section>
 </template>
@@ -86,7 +87,13 @@ export default {
       return this.exercise.sets.find(set => set.isActive) ? true : false;
     },
     exerciseFinished() {
-      return this.unfinishedSet >= 0 ? false : true;
+      return (this.unfinishedSet == -1) && (this.exercise.sets.length > 0) ? true: false;
+    },
+    leng() {
+      return this.exercise.sets.length
+    },
+    exerciseDuration() {
+      return this.$store.getters.exerciseDuration;
     }
   }
 }

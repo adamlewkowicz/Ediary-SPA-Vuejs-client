@@ -4,25 +4,45 @@
 
     <training-creat />
 
-    <button @click="trainingMode = !trainingMode">
-      {{ trainingMode ? 'Tryb edycji' : 'Tryb treningowy' }}
+    <button @click="editMode = !editMode">
+      {{ editMode ? 'Tryb edycji' : 'Tryb treningowy' }}
     </button>
 
-    <exercises v-if="!trainingMode"
+    <!-- <exercises v-if="!trainingMode"
       v-for="(exercise, exerciseKey) in dailyTrainings"
       :key="exerciseKey"
       :exerciseKey="exerciseKey"
       :exerciseId="exercise.id"
       :exercise="exercise"
-    />
+    /> -->
 
-    <trainings v-else
+    <div
       v-for="(exercise, exerciseKey) in dailyTrainings"
       :key="exerciseKey"
       :exerciseKey="exerciseKey"
       :exerciseId="exercise.id"
       :exercise="exercise"
-    />
+    >
+      <trainings-editor v-if="editMode"
+        :exerciseKey="exercise.exerciseKey"
+        :exerciseId="exercise.id"
+        :exercise="exercise"
+      />
+
+      <trainings v-else
+        :exerciseKey="exercise.exerciseKey"
+        :exerciseId="exercise.id"
+        :exercise="exercise"
+      />
+
+    </div>
+    <!-- <trainings
+      v-for="(exercise, exerciseKey) in dailyTrainings"
+      :key="exerciseKey"
+      :exerciseKey="exerciseKey"
+      :exerciseId="exercise.id"
+      :exercise="exercise"
+    /> -->
 
   </div>
 </template>
@@ -31,7 +51,7 @@
 import BarDatePicker from '@/components/BarDatePicker';
 import TrainingCreator from '@/components/TrainingCreator';
 import TrainingCreat from '@/components/TrainingCreat';
-import Exercises from '@/components/Exercises';
+import TrainingsEditor from '@/components/TrainingsEditor';
 import Trainings from '@/components/Trainings';
 
 export default {
@@ -39,12 +59,12 @@ export default {
     BarDatePicker,
     TrainingCreator,
     TrainingCreat,
-    Exercises,
+    TrainingsEditor,
     Trainings
   },
   data() {
     return {
-      trainingMode: false
+      editMode: true
     }
   },
   computed: {

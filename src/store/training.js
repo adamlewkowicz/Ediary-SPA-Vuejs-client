@@ -71,18 +71,20 @@ const training = {
   },
   getters: {
     datedOnTrainings: state => {
-      return state.exercises.reduce((trainings, training) => {
+      return state.exercises.reduce((trainings, training, index) => {
         const date = moment(training.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
         trainings[date] = trainings[date] || [];
-        trainings[date] = [...trainings[date], training];
+        trainings[date] = [...trainings[date], { ...training, exerciseKey: index }];
         return trainings;
       }, {});
     },
-    exerciseDuration: state => {
-      return state.exercises.map(exercise => exercise.sets.reduce((sets, set) => {
-        sets = sets + set.time + set.break;
-        return sets;
-      }), 0);
+    exerciseDuration: (state, getters) => {
+      return Object.keys(getters.datedOnTrainings).reduce((obj, trainingDate) => ({
+        ...obj,
+        [trainingDate]: getters.datedOnTrainings[trainingDate].reduce((time, training) => ({
+          time: training.sets.reduce((time, set) => time += set.break + set.time, 0)
+        }), 0)
+      }), {});
     }
   }
 }

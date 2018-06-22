@@ -9,7 +9,7 @@
         <th>Usuń</th>
       </thead>
       <tbody>
-        <exercises-sets
+        <trainings-sets-editor
           v-for="(set, setKey) in exercise.sets"
           :key="setKey"
           :exerciseKey="exerciseKey"
@@ -35,12 +35,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import ExercisesSets from '@/components/ExercisesSets';
+import TrainingsSetsEditor from '@/components/TrainingsSetsEditor';
 
 export default {
   props: ['exerciseKey', 'exerciseId', 'exercise'],
   components: {
-    ExercisesSets
+    TrainingsSetsEditor
   },
   computed: {
     meta () {
