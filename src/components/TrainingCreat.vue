@@ -49,7 +49,9 @@ export default {
       this.$store.dispatch('addExercise', {
         ...exercise,
         date: this.actualDate,
-        sets: []
+        sets: [],
+        break: 5,
+        finished: false
       });
     }
   },

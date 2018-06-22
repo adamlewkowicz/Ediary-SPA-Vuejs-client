@@ -57,7 +57,9 @@ export default {
         ...this.meta,
         set: {
           loadweight: 0,
-          repeats: 0
+          repeats: 0,
+          finished: false,
+          break: 5
         }
       });
     }
