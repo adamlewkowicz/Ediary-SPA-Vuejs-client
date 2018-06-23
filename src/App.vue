@@ -14,19 +14,21 @@ export default {
 <style lang="scss">
 body {
   margin: 0;
+  background-color: #f0f2f6;
 }
 #app {
   font-family: 'Open Sans';
   font-family: 'Segoe UI';
-  font-family: 'Lato';
-  font-family: 'Montserrat';
-  // background-color: #fafafa;
+  // font-family: 'Lato';
+  // font-family: 'Montserrat';
+  background-color: #f0f2f6;
   font-size: 14px;
-  color: #1f1f1f;
+  // color: #1f1f1f;
+  color: #342843;
   // background-color: red;
   box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
+  // width: 100%;
+  min-height: 100vh;
 }
 
 label {

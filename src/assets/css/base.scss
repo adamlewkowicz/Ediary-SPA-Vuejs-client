@@ -1,0 +1,30 @@
+$ff: 'Segoe UI';
+$fs: 14px;
+$fc: #342843;
+
+.fontSetup {
+  $ff: 'Segoe UI';
+  $fs: 14px;
+  $fc: #342843;
+}
+
+#app {
+  h1 {
+    font-size: 25px;
+    margin-top: 0px;
+  }
+  input[type=text], input[type=password], input[type=number] {
+    border-style: none;
+    font-family: $ff;
+    font-size: $fs;
+    color: $fc;
+  }
+  button {
+    border-style: none;
+    font-family: $ff;
+    font-size: $fs;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,3 +1,6 @@
+@import "./classes.scss";
+@import "./base.scss";
+
 @mixin desktop {
 	@media (min-width: 1200px) {
 		@content;
@@ -24,6 +27,7 @@
 
 $ff: 'Source Sans Pro', sans-serif;
 $ff: 'Montserrat', sans-serif;
+$ff: 'Segoe UI';
 $fs: 14px;
 $fss: 14px;
 
