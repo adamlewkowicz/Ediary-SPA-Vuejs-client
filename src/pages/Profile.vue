@@ -12,29 +12,39 @@
           <!-- <tr><td>Waga:</td> <td>{{ Number(meas.all.waga[0].value) }} kg</td></tr>w -->
           <tr><td>Wzrost:</td> <td>{{ meas.height }}</td></tr>
           <tr><td>Płeć:</td> <td>{{ meas.man ? 'Mężczyzna' : 'Kobieta' }}</td></tr>
+          <tr><td>Waga:</td> <td>{{ weight }}</td></tr>
+          <tr>
+            <td>Kalorie:</td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
 
-      <form>
+      <form
+        @submit.prevent="addMeas({
+          nameId: 1,
+          name: 'waga',
+          value: $event.target.elements.weightVal.value,
+          date: todaysDate
+        })"
+      >
         <p><label for="weight">Nowa waga:</label></p>
-        <input type="text" id="weight"/>
+        <input type="text" id="weight" name="weightVal"/>
         <button type="submit">Dodaj pomiar</button>
       </form>
 
       <div>
-        <table v-for="(measData, measProp) in meas.all" :key="measProp">
+        <table class="meas-tab">
           <thead>
             <tr>
-              <th>{{ measProp }}</th>
               <th>Wartość:</th>
               <th>Data:</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(singleMeas, singleMeasKey) in measData" :key="singleMeasKey">
-              <td>{{ singleMeas.name }}</td>
-              <td>{{ singleMeas.value }}</td>
-              <td>{{ singleMeas.date }}</td>
+            <tr v-for="(weightMeas, weightMeasKey) in weights" :key="weightMeasKey">
+              <td>{{ weightMeas.value }}</td>
+              <td>{{ weightMeas.date }}</td>
             </tr>
           </tbody>
         </table>
@@ -47,7 +57,7 @@
 
 <script>
 import moment from 'moment';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import FormElements from '@/components/FormElements';
 import UserData from '@/components/UserData';
 
@@ -55,18 +65,29 @@ export default {
   components: { FormElements, UserData },
   data() {
     return {
-      ok: null,
-      user: {
-        age: 28,
-        weight: 67,
-        height: 174,
-        man: true
-      }
+      ok: null
     }
   },
-  computed: mapState({
-    meas: state => state.measurements.general
-  })
+  methods: {
+    ...mapActions(['addMeas'])
+  },
+  computed: {
+    ...mapState({
+      meas: state => state.measurements.general
+    }),
+    todaysDate() {
+      return moment().format('YYYY-MM-DD HH:mm:ss');
+    },
+    weight() {
+      return this.$store.state.measurements.weight;
+    },
+    weights() {
+      return this.meas.all.waga.map(meas => ({
+        ...meas,
+        date: moment(meas.date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+      }));
+    }
+  }
 }
 </script>
 
@@ -77,6 +98,12 @@ td {
 
 form {
   margin-top: 50px;
+}
+
+.meas-tab {
+  width: 100%;
+  margin-top: 50px;
+  text-align: left;
 }
 
 input[type=text] {

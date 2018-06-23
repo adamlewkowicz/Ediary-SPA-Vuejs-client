@@ -13,11 +13,22 @@ const measurements = {
   mutations: {
     GET_MEAS (state, payload) {
       state.general = payload.data.meas;
+    },
+    ADD_MEAS (state, payload) {
+
+    },
+    ADD_WEIGHT (state, payload) {
+      state.weight = payload.value;
+      state.general.all.waga.push(payload);
     }
   },
   actions: {
     async getMeas({ commit }) {
       commit('GET_MEAS', await axios.get('/meas'));
+    },
+    async addMeas({ commit }, payload) {
+      const { data: { id }} = await axios.post(`/meas/all`, payload);
+      commit('ADD_WEIGHT', {...payload, id });
     }
   },
   getters: {

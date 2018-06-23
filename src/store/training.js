@@ -6,7 +6,7 @@ const training = {
   state: {
     exercises: [{
       break: 5,
-      date: "2018-06-22 13:40:45",
+      date: "2018-06-23 13:40:45",
       finished: false,
       id: 87,
       name: "Martwy ciąg",
