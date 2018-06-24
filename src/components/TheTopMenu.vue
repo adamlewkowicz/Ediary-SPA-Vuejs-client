@@ -28,12 +28,15 @@ export default {
 #menu_wrapper {
   background-color: #fff;
   height: 70px;
-  // box-shadow: 0px -10px 40px 10px #d8d8d8;
-  box-shadow: 0px -20px 40px 10px #d8d8d8;
+  margin-left: 200px;
+  box-shadow: 0px 0px 110px 0px rgba(212,214,242,.8);
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 0 50px;
+  @include tablet {
+    margin: 0;
+  }
 }
 
 .btn {

@@ -5,7 +5,7 @@
       :overlapSet="weeklyMealsMacro"
     />
 
-    <div>
+    <div class="box">
       <center>
         <p><meal-creator /></p>
         <p v-if="!todaysMeals.length">

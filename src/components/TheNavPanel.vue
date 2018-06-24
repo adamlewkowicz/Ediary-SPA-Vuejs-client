@@ -1,17 +1,20 @@
 <template>
   <div id="panel_wrapper">
-    <div id="nav">
+    <nav>
       <ul>
         <li>
           <router-link to="/" class="home">
+            Panel główny
           </router-link>
         </li>
         <li>
           <router-link to="/diary">
+            DZIENNIK
           </router-link>
         </li>
         <li>
           <router-link to="/training">
+            TRENINGI
           </router-link>
         </li>
         <li>
@@ -19,7 +22,7 @@
           </router-link>
         </li>
       </ul>
-    </div>
+    </nav>
   </div>
 </template>
 
@@ -39,44 +42,48 @@
 
 #panel_wrapper {
   width: 200px;
-  height: calc(100vh - 70px);
-  padding: 80px 0;
   box-sizing: border-box;
   position: fixed;
-  // box-shadow: -10px 30px 40px 10px #d8d8d8;
-}
-
-#nav {
-  height: 100%;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  position: relative;
-  top: calc((100% - 520px)/2);
-  }
-
-a {
-  background-position: calc(100px - 12px) calc(65px - 12px);
-  background-repeat: no-repeat;
-  height: 130px;
-  display: block;
-  border-right: 1px solid #dddddd;
-  &:hover, &:focus {
-    border-right: 2px solid #a7c0e9;
+  top: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom, #C38FFB, #7457D5);
+  @include tablet {
+    background: linear-gradient(to right, #C38FFB, #7457D5);
+    position: relative;
+    height: 50px;
+    width: 100%;
+    ul {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 
-a.router-link-exact-active {
-  border-right: 2px solid #a7c0e9;
+nav {
+  margin-top: 70px;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    display: block;
+    color: #fff;
+    padding: 15px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    text-indent: 1px;
+    &:hover {
+      background-color: rgba(0,0,0,.1);
+      border-radius: 12px;
+    }
+  }
+  @include tablet {
+    margin-top: 0px;
+    // height: 100%;
+  }
 }
 
-li {
-  &:first-child { a { @include icon("home"); } }
-  &:nth-child(2) { a { @include icon("calendar"); } }
-  &:nth-child(3) { a { @include icon("dumbbell"); } }
-  &:last-child { a { @include icon("chart"); } }
-}
+
 </style>

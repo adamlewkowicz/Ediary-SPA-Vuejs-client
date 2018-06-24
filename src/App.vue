@@ -14,7 +14,7 @@ export default {
 <style lang="scss">
 body {
   margin: 0;
-  background-color: #f0f2f6;
+  background-color: #fafbfd;
 }
 #app {
   font-family: 'Open Sans';

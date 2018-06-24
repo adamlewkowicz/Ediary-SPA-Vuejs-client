@@ -31,6 +31,12 @@ export default {
   box-sizing: border-box;
   margin-left: 200px;
   padding: 50px;
+  @include tablet {
+    margin: 0;
+  }
+  @include phone {
+    padding: 0;
+  }
 }
 
 input[type=text] {
