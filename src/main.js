@@ -8,7 +8,7 @@ import { store } from './store/store';
 
 // Vue.use(axios);
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoic29rcmF0MzNzIiwicGVybWlzc2lvbnMiOjAsInZlcmlmaWVkIjowLCJpYXQiOjE1Mjk2OTM3MzIsImV4cCI6MTUyOTk1MjkzMn0.0Yr1MRdA4nWBuRzzi3FYMiTUSQU-blerk3CcNRDkJUw`;
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoic29rcmF0MzNzIiwicGVybWlzc2lvbnMiOjAsInZlcmlmaWVkIjowLCJpYXQiOjE1MzAxMzU3MjgsImV4cCI6MTUzMDM5NDkyOH0.rdqrACJCdBjgZ1M1wUh2p5memL6D5375R8is1mPaUAQ`;
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

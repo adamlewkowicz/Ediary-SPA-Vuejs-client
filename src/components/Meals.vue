@@ -25,7 +25,7 @@
       <!-- <p>ID: {{ mealId }}</p> -->
     </div>
 
-    <section>
+    <section class="box">
       <table class="meals-table">
         <thead>
           <tr>
@@ -139,15 +139,17 @@ article {
 .meal-name {
   position: relative;
   display: inline-block;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 300;
   // margin: 0px 0px 30px 0;
   &:after {
     content: "";
     height: 4px;
     width: 110px;
-    background-color: rgba(46,204,113, .4);
+    background-color: rgba(46,204,113, .0);
     position: absolute;
-    top: 28px;
+    top: 34px;
     border-radius: 5px;
   }
 }
@@ -191,12 +193,6 @@ article {
   position: relative;
   top: 4px;
   margin-left: 10px;
-}
-
-section {
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0px 0px 30px -10px #d8d8d8;
 }
 
 .meals-table {

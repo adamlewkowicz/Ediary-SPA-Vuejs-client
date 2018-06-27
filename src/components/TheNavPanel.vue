@@ -9,16 +9,12 @@
         </li>
         <li>
           <router-link to="/diary">
-            DZIENNIK
+            Dziennik
           </router-link>
         </li>
         <li>
           <router-link to="/training">
-            TRENINGI
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/ae">
+            Treningi
           </router-link>
         </li>
       </ul>

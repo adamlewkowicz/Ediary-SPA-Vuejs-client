@@ -96,7 +96,8 @@ export default {
   font-size: 14px;
   outline: 0;
   &::placeholder {
-    color: #b6b6b6;
+    color: #a1a1a1;
+    font-weight: 300;
   }
 }
 

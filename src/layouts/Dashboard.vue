@@ -39,10 +39,9 @@ export default {
   }
 }
 
-input[type=text] {
-  @extend %input;
-  width: 100%;
-  box-sizing: border-box;
-  display: block;
-}
+// input[type=text] {
+
+//   box-sizing: border-box;
+//   display: block;
+// }
 </style>

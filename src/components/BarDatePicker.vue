@@ -1,8 +1,7 @@
 <template>
   <div class="bar-picker-wrapper">
-    <button @click="DECREASE_PICKED_WEEK"><</button>
+    <button @click="DECREASE_PICKED_WEEK"></button>
     <div class="datepicker">
-
         <div
           class="day"
           v-for="(day, dayKey) in week"
@@ -16,7 +15,7 @@
           {{ day.day }}
         </div>
     </div>
-    <button @click="INCREASE_PICKED_WEEK">></button>
+    <button @click="INCREASE_PICKED_WEEK"></button>
   </div>
 </template>
 
@@ -62,12 +61,75 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .bar-picker-wrapper {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
-  button {
-    background-image: url($icoUrl + "arrow.svg") no-repeat;
+}
+
+%buttonStyle {
+  background: url($icoUrl + "arrow.svg") no-repeat center;
+  background-size: 24px;
+  width: 44px;
+  outline: none;
+}
+
+button {
+  transition: background-size .1s;
+  @extend %buttonStyle;
+  &:first-child {
+    transform: rotate(180deg);
+  }
+  &:hover {
+    background-size: 30px;
+    animation: move 1s ease infinite;
+  }
+}
+
+.clicked-btn {
+  &:before {
+    @extend %buttonStyle;
+  }
+}
+
+@keyframes move {
+  0% {
+    background-position-x: 0;
+  }
+  50% {
+    background-position-x: 10px;
+  }
+  100% {
+    background-position-x: 0;
+
+  }
+}
+
+@keyframes move2 {
+  0% {
+    background-position-x: 0;
+    background-size: 24px;
+    opacity: 0;
+  }
+  20% {
+    // opacity: 1;
+    background-size: 30px;
+  }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    background-size: 30px;
+    background-position-x: 10px;
+  }
+  80% {
+    background-size: 30px;
+    background-position-x: 10px;
+  }
+  100% {
+    background-size: 30px;
+    background-position-x: 10px;
   }
 }
 
@@ -83,7 +145,8 @@ export default {
 .day {
   padding: 20px;
   font-size: 16px;
-  width: 100%;
+  width: 63px;
+  box-sizing: border-box;
   text-align: center;
   position: relative;
   font-weight: 300;
@@ -102,28 +165,20 @@ export default {
   }
   @include phone {
     padding: 15px;
+    width: 50px;
   }
   @include small {
     padding: 10px;
     font-size: 18px;
+    width: 40px;
   }
 }
 
 .selected-day {
   background: linear-gradient(to top, #DF9FFF, #732EB8);
-  animation: fadeLeft 1s ease;
   // border-bottom: 1px solid rgba(255,255,255, .9);
   // border-top: 1px solid rgba(255,255,255, 0.03);
   // border-bottom: 2px solid #333333;
-}
-
-@keyframes fadeLeft {
-  0% {
-    background-position-x: 30px;
-  }
-  100% {
-    background-position-x: 0px;
-  }
 }
 
 .dot-overlap {
