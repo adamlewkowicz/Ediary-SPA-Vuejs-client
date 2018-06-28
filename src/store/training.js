@@ -3,19 +3,22 @@ import axios from "axios";
 import moment from "moment";
 
 const training = {
+  // state: {
+  //   exercises: [{
+  //     break: 5,
+  //     date: "2018-06-29 13:40:45",
+  //     finished: false,
+  //     id: 87,
+  //     name: "Martwy ciąg",
+  //     nameId: 2,
+  //     sets: [
+  //       { id: 114, loadweight: 0, repeats: 0, finished: false, break: 5, time: 0, isActive: false },
+  //       { id: 115, loadweight: 0, repeats: 0, finished: false, break: 6, time: 0, isActive: false }
+  //     ]
+  //   }]
+  // },
   state: {
-    exercises: [{
-      break: 5,
-      date: "2018-06-23 13:40:45",
-      finished: false,
-      id: 87,
-      name: "Martwy ciąg",
-      nameId: 2,
-      sets: [
-        { id: 114, loadweight: 0, repeats: 0, finished: false, break: 5, time: 0, isActive: false },
-        { id: 115, loadweight: 0, repeats: 0, finished: false, break: 6, time: 0, isActive: false }
-      ]
-    }]
+    exercises: []
   },
   mutations: {
     ADD_EXERCISE (state, payload) {
@@ -56,6 +59,7 @@ const training = {
       await axios.delete(`/trainings/${payload.exerciseId}`);
     },
     async addExerciseSet ({ commit }, payload) {
+      console.log(payload)
       const { data: { id }} = await axios.post(`/trainings/${payload.exerciseId}`, payload.set);
       payload.set.id = id;
       commit('ADD_EXERCISE_SET', payload);
@@ -70,21 +74,20 @@ const training = {
     }
   },
   getters: {
-    datedOnTrainings: state => {
-      return state.exercises.reduce((trainings, training, index) => {
+    exercisesDuration: state => {
+      return state.exercises.map((exercise, index) => ({
+        ...exercise,
+        exerciseKey: index,
+        duration: exercise.sets.reduce((duration, set) => duration += set.time + set.break, 0)
+      }))
+    },
+    datedOnTrainings: (state, getters) => {
+      return getters.exercisesDuration.reduce((trainings, training, index) => {
         const date = moment(training.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
         trainings[date] = trainings[date] || [];
-        trainings[date] = [...trainings[date], { ...training, exerciseKey: index }];
+        trainings[date] = [...trainings[date], training];
         return trainings;
       }, {});
-    },
-    exerciseDuration: (state, getters) => {
-      return Object.keys(getters.datedOnTrainings).reduce((obj, trainingDate) => ({
-        ...obj,
-        [trainingDate]: getters.datedOnTrainings[trainingDate].reduce((time, training) => ({
-          time: training.sets.reduce((time, set) => time += set.break + set.time, 0)
-        }), 0)
-      }), {});
     }
   }
 }

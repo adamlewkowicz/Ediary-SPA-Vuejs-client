@@ -66,7 +66,7 @@ export default {
         confirm(`Czy chcesz powtórzyć tą (${setKey+1}) serię?`);
         this.updateExerciseSet(setKey, { isActive: true, finished: false });
       } else if (this.isTraining) {
-        this.errors.push('Skończ biężącą serię aby zacząć następną');
+        this.errors.push('Skończ bieżącą serię aby zacząć następną');
       } else {
         this.updateExerciseSet(setKey, { isActive: true });
       }

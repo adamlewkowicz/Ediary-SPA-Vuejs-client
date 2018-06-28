@@ -1,5 +1,6 @@
 <template>
   <tr>
+
     <template v-if="set.isActive">
       <td colspan="5" class="active-set"
         :class="{ 'break': activeBreak }">
@@ -24,6 +25,7 @@
 
       </td>
     </template>
+
     <template v-else>
       <td>{{ setKey+1 }}</td>
       <td>{{ set.repeats }}</td>
@@ -31,6 +33,7 @@
       <td>{{ set.time }}s</td>
       <td>{{ set.break }}s</td>
     </template>
+
   </tr>
 </template>
 
@@ -98,6 +101,9 @@ export default {
         this.startSet();
       }
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 }
 </script>

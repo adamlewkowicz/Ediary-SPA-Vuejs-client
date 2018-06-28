@@ -6,7 +6,7 @@
     />
 
     <div class="meal-helpers">
-      <button class="create-meal">Dodaj nowy posiłek</button>
+      <button class="add-btn">Dodaj nowy posiłek</button>
       <!-- <p><meal-creator /></p> -->
       <p v-if="!todaysMeals.length">
         Brak posiłków w dniu: {{ pickedDate }}

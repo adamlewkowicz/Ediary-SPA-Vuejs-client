@@ -1,172 +1,147 @@
 <template>
-  <div>
-    <button class="new-meal-btn" @click="creatorActive = true">+</button>
-    <div v-if="creatorActive" class="creator-wrapper">
-      <div class="theater-curtain"></div>
-      <div class="creator">
-        <button class="cancel-btn" @click="creatorActive = false">&#x2715;</button>
-        <h3>Dodaj nowy trening</h3>
-
-        <label for="name">Nazwa:</label>
-        <input type="text" v-model="meal.name" id="name">
-        <label for="date">Data:</label>
-        <input type="text" v-model="meal.date" id="date">
-        <label>Makroskładniki:</label>
-        <div class="macro-elements">
-          <div>
-            <label for="carbs">Węgle:</label>
-            <input type="text" v-model="meal.carbs" id="carbs"/>
-          </div>
-          <div>
-            <label for="prots">Białko:</label>
-            <input type="text" v-model="meal.prots" id="prots"/>
-          </div>
-          <div>
-            <label for="fats">Tłuszcze:</label>
-            <input type="text" v-model="meal.fats" id="fats"/>
-          </div>
-          <div>
-            <label for="kcals">Kalorie:</label>
-            <input type="text" v-model="meal.kcals" id="kcals"/>
-          </div>
-        </div>
-        <p v-for="(err, errKey) in errors" :key="errKey" class="errors">
-          {{ err }}
-        </p>
-
-        <button class="add-meal-btn" @click="addMeal">Dodaj trening</button>
-      </div>
+  <div class="training-creator-wrapper">
+    <label for="exercise-name">Podaj nazwę ćwiczenia:</label>
+    <div class="finder-wrapper">
+      <input type="text"
+        placeholder=""
+        class="text"
+        v-model="exerciseName"
+        id="exercise-name"
+        @input="findExercise"
+      />
+      <!-- <button @click="clearSearch">x</button> -->
+    </div>
+    <div class="seracher-results" v-show="exercisesFound.length">
+      <ul>
+        <li
+          v-for="(exercise, exerciseKey) in exercisesFound"
+          :key="exerciseKey"
+          @click="addExercise(exercise)">
+            {{ exercise.name }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import moment from 'moment';
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      creatorActive: false,
-      meal: {
-        name: 'Posiłek',
-        date: '',
-        carbs: 0,
-        prots: 0,
-        fats: 0,
-        kcals: 0,
-        products: []
-      },
-      errors: []
-    }
-  },
-  watch: {
-    creatorActive (status) {
-      if (status == true) {
-        this.meal.date = this.pickedDate + ' ' + moment().format('HH:mm:ss');
-      }
+      exerciseName: '',
+      exercisesFound: [],
+      timeOut: null
     }
   },
   methods: {
-    addMeal() {
-      const { name, date } = this.meal;
-      this.errors = [];
-      if (Object.values(this.meal).some(val => (val.length == 0) && (!val instanceof Array))) {
-        this.errors.push('Proszę wypełnić wszystkie pola');
-      } else {
-        this.creatorActive = false;
-        this.$store.dispatch('addMeal', this.meal);
+    // ...mapActions(['addExercise']),
+    findExercise() {
+      clearTimeout(this.timeOut);
+      if (!this.exerciseName.length) this.clearSearch();
+      else {
+        this.timeOut = setTimeout(async () => {
+          const { data } = await axios.get(`/trainings/exercise-names/${this.exerciseName}`);
+          this.exercisesFound = data.exerciseNames;
+        }, 200);
       }
+    },
+    addExercise(exercise) {
+      this.clearSearch();
+      this.$store.dispatch('addExercise', {
+        ...exercise,
+        date: this.actualDate,
+        sets: [],
+        time: 0,
+        break: 10,
+        finished: false
+      });
+    },
+    clearSearch() {
+      this.exerciseName = '';
+      this.exercisesFound = [];
     }
   },
   computed: {
     pickedDate() {
       return this.$store.state.date.picked;
+    },
+    actualDate() {
+      return `${this.pickedDate} ${moment().format('HH:mm:ss')}`
     }
   }
 }
 </script>
 
-
 <style lang="scss" scoped>
-.theater-curtain {
-  background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  position: absolute;
-  z-index: 2;
-  user-select: none;
-  box-sizing: border-box;
+.training-creator-wrapper {
+  position: relative;
+  margin-bottom: 40px;
 }
 
-.creator {
-  z-index: 3;
-  background-color: #fff;
-  width: 400px;
-  position: fixed;
-  margin: 0 auto;
-  left: calc(50% - 150px);
-  padding: 40px;
-  box-sizing: border-box;
-  label {
-    font-weight: 300;
-  }
-  h3 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  input[type=text] {
-    @extend %input;
-    width: 100%;
-    box-sizing: border-box;
-    display: block;
-    margin-bottom: 20px;
-  }
-}
-
-.errors {
-  color: #eb4d4b;
-  text-align: center;
-}
-
-.cancel-btn {
-  @extend %clearBtn;
-  background-color: #fff;
-  padding: 8px;
-  width: 33px;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  &:hover {
-    background-color: #eb4d4b;
-    color: #fff;
-  }
-}
-
-.macro-elements {
+.finder-wrapper {
   display: flex;
-  label {
-    text-align: center;
-  }
-  div {
-    padding: 10px;
-    color: #5e5e5e;
-    input[type=text] {
-      margin-bottom: 15px;
-      text-align: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.exercise-name {
+  flex: 9;
+  border-radius: 20px 20px;
+}
+
+.seracher-results {
+  animation: sizeIn .3s ease;
+  border-radius: 6px;
+  max-height: 204px;
+  width: 300px;
+  background-color: #fff;
+  // box-shadow: 0 0 30px 0px rgba(212, 214, 242, .6);
+  box-shadow: 0 0 30px 0px rgba(212, 214, 242, .9);
+  overflow: auto;
+  position: absolute;
+  z-index: 1;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      background-color: #fff;
+      display: block;
+      padding: 16px;
+      border-radius: 6px;
+      &:hover {
+        background-color: #a97cfc;
+        color: #fff;
+      }
     }
   }
 }
 
-.add-meal-btn {
+@keyframes sizeIn {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.add-exercise-btn {
   @extend %clearBtn;
-  background-color: #30336b;
-  width: 100%;
-  border-radius: 30px;
-  padding: 15px;
-  color: #fff;
-  margin-top: 10px;
+  // color: #fff;
+  // flex: 2;
+  // font-size: 16px;
+  // padding-left: 2px;
+  // box-sizing: border-box;
+  // box-shadow: -7px 0px 40px rgba(84, 87, 219, .5);
+  // background-color: #31358d;
+  // border-radius: 0 20px 20px 0;
+  // height: 38px;
+  // min-width: 50px;
 }
 </style>
 
