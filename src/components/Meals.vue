@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="meal-wrapper">
     <h3 class="meal-name" :class="{ 'animated-bar': editName }">
       <form v-if="editName"
         @submit.prevent="updateMeal({
@@ -131,7 +131,7 @@ article {
   position: relative;
   h3 {
     margin-bottom: 25px;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: normal;
   }
 }
@@ -204,10 +204,20 @@ article {
       text-align: left;
     }
   }
+  th {
+    &:nth-child(2) {
+      padding: 12px 18px 12px 5px;
+    }
+  }
   tbody {
     tr {
-      &:nth-child(even) {
-        background-color: #f9f9f9;
+      // &:nth-child(even) {
+      //   background-color: #f9f9f9;
+      // }
+      input[type=number] {
+        &:nth-child(odd) {
+          background-color: red;
+        }
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <tr v-if="!product.showDetails" class="default-details">
     <td>
-      {{ product.name }}
+      {{ product.name | cutNameLength }}
       <!-- <button
         @click="triggerDetails(true)"
         class="show-details-btn"
@@ -33,7 +33,7 @@
       <table>
         <tr>
           <td>Nazwa:</td>
-          <td>{{ product.name }}</td>
+          <td>{{ product.name || cutNameLength }}</td>
         </tr>
         <tr>
           <td>Źródło:</td>
@@ -79,6 +79,11 @@ export default {
       this.UPDATE_MEAL_PRODUCT({ ...this.meta, product: { showDetails: boolean }})
     }
   },
+  filters: {
+    cutNameLength (name) {
+      return (name.length > 50) ? (name.substring(0, 45)) + "..." : name;
+    }
+  },
   computed: {
     meta() {
       const { mealKey, mealId, productKey, productId } = this;
@@ -90,19 +95,21 @@ export default {
 
 <style lang="scss" scoped>
 .portion-weight {
-  max-width: 50px;
+  width: 50px;
+  min-height: 45px;
   text-align: center;
   font-size: 14px;
-  padding-left: 10px;
   box-sizing: border-box;
   font-family: $ff;
   border-style: none;
-  border-bottom: 1px solid #d8d8d8;
+  color: #056bb5;
+  background-color: #fff;
+  // border-bottom: 1px solid #d8d8d8;
 }
 
 .show-details-btn {
   @extend %clearBtn;
-  background: url('./../assets/img/icons/arrow-down.png') no-repeat center;
+  background: url($icoUrl + "arrow-down.png") no-repeat center;
   height: 22px;
   width: 22px;
   transition: transform .3s ease;
@@ -115,9 +122,8 @@ export default {
 .btn-del-product {
   @extend %clearBtn;
   background-color: #e8e8e8;
-  border-radius: 30px;
-  width: 22px;
-  height: 22px;
+  min-width: 44px;
+  min-height: 44px;
   &:hover {
     background-color: #ff7675;
     color: #fff;
@@ -126,7 +132,10 @@ export default {
 
 .default-details {
   td {
-    padding: 12px;
+    // padding: 12px;
+    &:not(:nth-child(2)):not(:last-child) {
+      padding: 12px;
+    }
     &:not(:first-child) {
       text-align: center;
     }

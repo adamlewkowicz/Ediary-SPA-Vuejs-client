@@ -5,13 +5,12 @@
       :overlapSet="weeklyMealsMacro"
     />
 
-    <div class="box">
-      <center>
-        <p><meal-creator /></p>
-        <p v-if="!todaysMeals.length">
-          Brak posiłków w dniu: {{ pickedDate }}
-        </p>
-      </center>
+    <div class="meal-helpers">
+      <button class="create-meal">Dodaj nowy posiłek</button>
+      <!-- <p><meal-creator /></p> -->
+      <p v-if="!todaysMeals.length">
+        Brak posiłków w dniu: {{ pickedDate }}
+      </p>
     </div>
 
     <meals
@@ -81,6 +80,38 @@ export default {
   width: 35px;
   &:hover, &:focus {
     cursor: pointer;
+  }
+}
+
+.meal-helpers {
+  p {
+    margin-top: 200px;
+    text-align: center;
+  }
+}
+
+.create-meal {
+  background-color: #fff;
+  padding: 13px;
+  padding-right: 30px;
+  box-shadow: 0px 0px 60px 3px rgba(212,214,242,1);
+  border-radius: 6px;
+  position: relative;
+  outline: none;
+  display: block;
+  margin: 30px auto;
+  &::after {
+    content: "+";
+    font-family: $ff;
+    position: absolute;
+    padding: 15px;
+    top: calc(50% - 24.5px);
+    right: -25px;
+    color: #fff;
+    background-color: $purple;
+    border-radius: 30px;
+    width: 49px;
+    box-sizing: border-box;
   }
 }
 </style>
