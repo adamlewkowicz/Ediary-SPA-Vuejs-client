@@ -55,8 +55,7 @@ export default {
         ...exercise,
         date: this.actualDate,
         sets: [],
-        time: 0,
-        break: 10,
+        duration: 0,
         finished: false
       });
     },

@@ -10,7 +10,7 @@
           @click="CHANGE_PICKED_DATE(day.date)"
         >
           <div v-if="overlapSet[day.date]" class="dot-overlap">
-            {{ parseInt(overlapSet[day.date].value) }}
+            {{ overlapSet[day.date] == 0 ? '0' : parseInt(overlapSet[day.date]) }}
           </div>
           {{ day.day }}
         </div>

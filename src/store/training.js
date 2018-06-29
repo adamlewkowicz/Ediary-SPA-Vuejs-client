@@ -18,9 +18,16 @@ const training = {
   //   }]
   // },
   state: {
-    exercises: []
+    exercises: [],
+    trainingMode: false
   },
   mutations: {
+    CHANGE_TRAINING_MODE (state) {
+      state.trainingMode = !state.trainingMode;
+    },
+    GET_EXERCISES (state, payload) {
+      state.exercises = payload.data.exercises;
+    },
     ADD_EXERCISE (state, payload) {
       state.exercises.push(payload);
     },
@@ -37,7 +44,7 @@ const training = {
     },
     UPDATE_EXERCISE_SET (state, payload) {
       const { exerciseKey, setKey } = payload;
-      for (const prop in payload.set) {
+      for (let prop in payload.set) {
         state.exercises[exerciseKey].sets[setKey][prop] = payload.set[prop];
       }
     },
@@ -47,19 +54,18 @@ const training = {
     }
   },
   actions: {
+    async getExercises ({ commit }, date) {
+      commit('GET_EXERCISES', await axios.get(`/trainings/${date}`));
+    },
     async addExercise ({ commit }, payload) {
       const { data: { id }} = await axios.post(`/trainings`, payload);
-      commit('ADD_EXERCISE', {
-        id,
-        ...payload
-      });
+      commit('ADD_EXERCISE', { id, ...payload });
     },
     async deleteExercise ({ commit }, payload) {
       commit('DELETE_EXERCISE', payload.exerciseKey);
       await axios.delete(`/trainings/${payload.exerciseId}`);
     },
     async addExerciseSet ({ commit }, payload) {
-      console.log(payload)
       const { data: { id }} = await axios.post(`/trainings/${payload.exerciseId}`, payload.set);
       payload.set.id = id;
       commit('ADD_EXERCISE_SET', payload);
@@ -88,6 +94,12 @@ const training = {
         trainings[date] = [...trainings[date], training];
         return trainings;
       }, {});
+    },
+    numberOfExercises: (state, getters) => {
+      return Object.keys(getters.datedOnTrainings).reduce((obj, date) => ({
+        ...obj,
+        [date]: getters.datedOnTrainings[date].length
+      }), {});
     }
   }
 }

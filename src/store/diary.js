@@ -135,10 +135,7 @@ const diary = {
       const weeklyM = getters.weeklyMeals;
       return Object.keys(weeklyM).reduce((meals, mealDate) => ({
         ...meals,
-        [mealDate]: weeklyM[mealDate].reduce((macro, meal) => ({
-          ...macro,
-          value: macro.value += meal.kcals
-        }), { value: 0 })
+        [mealDate]: weeklyM[mealDate].reduce((sumMacro, meal) => sumMacro += meal.kcals, 0)
       }), {});
     }
   }

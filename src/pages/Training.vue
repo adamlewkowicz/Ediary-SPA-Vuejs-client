@@ -1,19 +1,22 @@
 <template>
   <div :class="{ 'training-mode-bg': !editMode }">
 
-    <bar-date-picker v-show="editMode"/>
+    <bar-date-picker
+      v-show="!trainingMode"
+      :overlapSet="numberOfExercises"
+    />
 
-    <button @click="editMode = !editMode" class="mode-changer">
-      {{ editMode ? 'Tryb treningowy' : 'Tryb edycji' }}
+    <button @click="CHANGE_TRAINING_MODE" class="mode-changer">
+      {{ trainingMode ? 'Tryb edycji' : 'Tryb treningowy' }}
     </button>
 
-    <training-creator v-show="editMode"/>
+    <training-creator v-show="!trainingMode"/>
 
     <div
       v-for="(exercise, exerciseKey) in dailyTrainings"
       :key="exerciseKey"
     >
-      <trainings-editor v-if="editMode"
+      <trainings-editor v-if="!trainingMode"
         :exerciseKey="exercise.exerciseKey"
         :exerciseId="exercise.id"
         :exercise="exercise"
@@ -31,6 +34,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+
 import BarDatePicker from '@/components/BarDatePicker';
 import TrainingCreator from '@/components/TrainingCreator';
 import TrainingsEditor from '@/components/TrainingsEditor';
@@ -48,13 +53,27 @@ export default {
       editMode: true
     }
   },
+  methods: {
+    ...mapActions(['getExercises']),
+    ...mapMutations(['CHANGE_TRAINING_MODE'])
+  },
   computed: {
+    ...mapGetters(['numberOfExercises']),
     pickedDate() {
       return this.$store.state.date.picked;
     },
+    pickedWeek () {
+      return this.$store.state.date.pickedWeek;
+    },
     dailyTrainings() {
       return this.$store.getters.datedOnTrainings[this.pickedDate] || [];
+    },
+    trainingMode () {
+      return this.$store.state.training.trainingMode;
     }
+  },
+  mounted() {
+    this.getExercises(this.pickedWeek);
   }
 }
 </script>

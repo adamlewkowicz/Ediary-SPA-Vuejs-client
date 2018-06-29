@@ -1,9 +1,12 @@
 <template>
   <div>
-    <top-menu />
-    <nav-panel />
-    <section id="page-wrapper">
-      <h1>Dziennik</h1>
+    <top-menu v-show="!trainingMode"/>
+    <nav-panel v-show="!trainingMode"/>
+    <section
+      class="page-wrapper"
+      :class="{ 'training-mode': trainingMode }"
+    >
+      <h1 v-show="!trainingMode">Dziennik</h1>
       <router-view />
     </section>
   </div>
@@ -22,12 +25,17 @@ export default {
   },
   created() {
     this.getMeas();
+  },
+  computed: {
+    trainingMode () {
+      return this.$store.state.training.trainingMode;
+    }
   }
 }
 </script>
 
 <style lang="scss">
-#page-wrapper {
+.page-wrapper {
   box-sizing: border-box;
   margin-left: 200px;
   padding: 50px;
@@ -36,6 +44,10 @@ export default {
   }
   @include phone {
     padding: 0;
+  }
+  &.training-mode {
+    padding: 0px;
+    // background-color: #6c5ce7;
   }
 }
 
