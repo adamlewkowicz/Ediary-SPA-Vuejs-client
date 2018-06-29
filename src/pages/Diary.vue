@@ -6,7 +6,7 @@
     />
 
     <div class="meal-helpers">
-      <button class="add-btn">Dodaj nowy posiłek</button>
+      <button class="add-btn" @click="addMeal">Dodaj nowy posiłek</button>
       <!-- <p><meal-creator /></p> -->
       <p v-if="!todaysMeals.length">
         Brak posiłków w dniu: {{ pickedDate }}
@@ -45,7 +45,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getMeals'])
+    ...mapActions(['getMeals']),
+    addMeal() {
+      this.$store.dispatch('addMeal', {
+        name: 'Posiłek',
+        date: this.pickedDate,
+        carbs: 0,
+        prots: 0,
+        fats: 0,
+        kcals: 0,
+        products: []
+      });
+    }
   },
   computed: {
     ...mapGetters(['weeklyMeals', 'weeklyMealsMacro']),

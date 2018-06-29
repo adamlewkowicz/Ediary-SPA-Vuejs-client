@@ -19,6 +19,10 @@ const training = {
   // },
   state: {
     exercises: [],
+    additionalSetProps: {
+      isActive: false,
+      finished: false
+    },
     trainingMode: false
   },
   mutations: {
@@ -26,7 +30,10 @@ const training = {
       state.trainingMode = !state.trainingMode;
     },
     GET_EXERCISES (state, payload) {
-      state.exercises = payload.data.exercises;
+      state.exercises = payload.data.exercises.map(exercise => ({
+        ...exercise,
+        sets: exercise.sets.map(set => ({...set, ...state.additionalSetProps}))
+      }));
     },
     ADD_EXERCISE (state, payload) {
       state.exercises.push(payload);

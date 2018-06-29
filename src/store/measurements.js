@@ -6,13 +6,16 @@ const roundNum = val => Math.round(val * 100) / 100;
 
 const measurements = {
   state: {
-    general: {},
-    weight: 64.8,
+    weight: 0,
     bodyFat: 13.3 / 100
   },
   mutations: {
     GET_MEAS (state, payload) {
-      state.general = payload.data.meas;
+      const { meas } = payload.data;
+      for (let prop in meas) {
+        state[prop] = meas[prop];
+      }
+      state.weight = parseFloat(meas.all.find(meas => meas.name == 'waga').value);
     },
     ADD_MEAS (state, payload) {
 

@@ -65,8 +65,8 @@
             <td>
               <button
                 @click="deleteMeal({ mealKey, mealId })"
-                class="btn-del-product"
-              >&#x2715;</button>
+                class="del-btn"
+              ></button>
             </td>
           </tr>
         </tfoot>

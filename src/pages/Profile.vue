@@ -6,13 +6,12 @@
     <div v-else>
 
       <p>Twoje dane:</p>
-      <table>
+      <table class="box">
         <tbody>
           <tr><td>Wiek:</td> <td>{{ meas.age }}</td></tr>
-          <!-- <tr><td>Waga:</td> <td>{{ Number(meas.all.waga[0].value) }} kg</td></tr>w -->
           <tr><td>Wzrost:</td> <td>{{ meas.height }}</td></tr>
           <tr><td>Płeć:</td> <td>{{ meas.man ? 'Mężczyzna' : 'Kobieta' }}</td></tr>
-          <tr><td>Waga:</td> <td>{{ weight }}</td></tr>
+          <tr><td>Waga:</td> <td>{{ meas.weight }}</td></tr>
           <tr>
             <td>Kalorie:</td>
             <td></td>
@@ -73,19 +72,20 @@ export default {
   },
   computed: {
     ...mapState({
-      meas: state => state.measurements.general
+      meas: state => state.measurements
     }),
     todaysDate() {
       return moment().format('YYYY-MM-DD HH:mm:ss');
     },
-    weight() {
-      return this.$store.state.measurements.weight;
-    },
     weights() {
-      return this.meas.all.waga.map(meas => ({
-        ...meas,
-        date: moment(meas.date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
-      }));
+      if (!this.meas.all) return [];
+      return this.meas.all
+        .filter(meas => meas.name == 'waga')
+        .map(meas => ({
+          ...meas,
+          date: moment(meas.date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        })
+      );
     }
   }
 }

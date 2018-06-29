@@ -21,10 +21,10 @@
     <td>{{ product.fats }}</td>
     <td>{{ product.kcals }}</td>
     <td>
-      <button class="btn-del-product"
+      <button class="del-btn"
         @click="deleteMealProduct({
           mealKey, mealId, productKey, productId
-        })">&#x2715;</button>
+        })"></button>
     </td>
   </tr>
   <tr v-else>

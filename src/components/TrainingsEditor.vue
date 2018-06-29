@@ -57,6 +57,9 @@ export default {
         exerciseKey: this.exerciseKey,
         exerciseId: this.exerciseId
       }
+    },
+    additionalSetProps () {
+      return this.$store.state.training.additionalSetProps;
     }
   },
   methods: {
@@ -69,8 +72,7 @@ export default {
           repeats: 0,
           break: 10,
           time: 0,
-          finished: false,
-          isActive: false
+          ...this.additionalSetProps
         }
       });
     }
