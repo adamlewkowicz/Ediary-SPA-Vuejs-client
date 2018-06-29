@@ -39,9 +39,10 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import axios from 'axios';
 
 export default {
-  props: ['exerciseKey', 'setKey', 'set', 'lastSet'],
+  props: ['exerciseKey', 'exerciseId', 'setKey', 'set', 'lastSet'],
   data() {
     return {
       activeBreak: false,
@@ -71,13 +72,14 @@ export default {
       this.countBreakTime += time;
       this.updateExerciseSet({ break: this.set.break + time });
     },
-    endBreak() {
+    async endBreak() {
       clearInterval(this.interval);
       this.updateExerciseSet({
         finished: true,
         isActive: false,
         break: this.set.break - this.countBreakTime
       });
+      await axios.patch(`/trainings/${this.exerciseId}/${this.set.id}`, this.set);
       this.$emit('nextSet');
     },
     updateExerciseSet(set, setKey = this.setKey) {
@@ -103,6 +105,9 @@ export default {
     }
   },
   beforeDestroy() {
+    if (this.isActive) {
+      this.updateExerciseSet({ isActive: false, finished: false });
+    }
     clearInterval(this.interval);
   }
 }

@@ -92,10 +92,10 @@ const training = {
         ...exercise,
         exerciseKey: index,
         duration: exercise.sets.reduce((duration, set) => duration += set.time + set.break, 0)
-      }))
+      }));
     },
     datedOnTrainings: (state, getters) => {
-      return getters.exercisesDuration.reduce((trainings, training, index) => {
+      return getters.exercisesDuration.reduce((trainings, training) => {
         const date = moment(training.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
         trainings[date] = trainings[date] || [];
         trainings[date] = [...trainings[date], training];

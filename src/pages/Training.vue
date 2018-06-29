@@ -54,7 +54,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getExercises']),
     ...mapMutations(['CHANGE_TRAINING_MODE'])
   },
   computed: {
@@ -71,9 +70,6 @@ export default {
     trainingMode () {
       return this.$store.state.training.trainingMode;
     }
-  },
-  mounted() {
-    this.getExercises(this.pickedWeek);
   }
 }
 </script>

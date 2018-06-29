@@ -21,14 +21,18 @@ import NavPanel from './../components/TheNavPanel.vue';
 export default {
   components: { TopMenu, NavPanel },
   methods: {
-    ...mapActions(['getMeas'])
+    ...mapActions(['getMeas', 'getExercises'])
   },
-  created() {
+  mounted() {
     this.getMeas();
+    this.getExercises(this.pickedDate);
   },
   computed: {
     trainingMode () {
       return this.$store.state.training.trainingMode;
+    },
+    pickedDate () {
+      return this.$store.state.date.pickedWeek;
     }
   }
 }

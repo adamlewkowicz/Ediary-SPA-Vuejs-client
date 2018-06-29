@@ -1,11 +1,13 @@
 <template>
-  <section>
+  <section class="box">
     <h1>{{ exercise.name }}</h1>
     <p>Przerwa między seriami: {{ exercise.break }} s</p>
     <button
       class="start-exercise-btn"
       @click="activeSet=0; isTraining=true"
-    >{{ (isTraining || exerciseFinished) ? 'Rozpocznij ponownie' : 'Rozpocznij' }}</button>
+    >
+      {{ (isTraining || exerciseFinished) ? 'Rozpocznij ponownie' : 'Rozpocznij' }}
+    </button>
     <p v-for="(error, errorKey) in errors" :key="errorKey">
       {{ error }}
     </p>
@@ -24,16 +26,17 @@
           v-for="(set, setKey) in exercise.sets"
           :key="setKey"
           :exerciseKey="exerciseKey"
+          :exerciseId="exerciseId"
           :setKey="setKey"
           :set="set"
           @click.native="activateSet(set, setKey)"
-          @nextSet="changeActiveSet"
+          @nextSet="jumpToNextSet"
         />
       </tbody>
     </table>
     <div v-if="exerciseFinished" class="finished">
       Ćwiczenie ukończone!
-      <!-- {{ }} -->
+      <p>Całkowity czas ćwiczenia: {{ exerciseDurationInMins }} minuty</p>
     </div>
   </section>
 </template>
@@ -41,6 +44,7 @@
 <script>
 import { mapMutations } from 'vuex';
 import TrainingsSets from '@/components/TrainingsSets';
+import axios from 'axios';
 
 export default {
   props: ['exerciseKey', 'exerciseId', 'exercise'],
@@ -54,19 +58,19 @@ export default {
   },
   methods: {
     ...mapMutations(['UPDATE_EXERCISE_SET']),
-    changeActiveSet(setKey) {
-      if (this.unfinishedSet < 0) {
-      } else {
+    jumpToNextSet(setKey) {
+      if (this.unfinishedSet > 0) {
         this.updateExerciseSet(this.unfinishedSet, { isActive: true });
       }
     },
     activateSet(set, setKey) {
       this.errors = [];
-      if (set.finished==true) {
-        confirm(`Czy chcesz powtórzyć tą (${setKey+1}) serię?`);
-        this.updateExerciseSet(setKey, { isActive: true, finished: false });
-      } else if (this.isTraining) {
+      if (this.isTraining) {
         this.errors.push('Skończ bieżącą serię aby zacząć następną');
+      } else if (set.finished==true) {
+        if (confirm(`Czy chcesz powtórzyć tą (${setKey+1}) serię?`)) {
+          this.updateExerciseSet(setKey, { isActive: true, finished: false });
+        }
       } else {
         this.updateExerciseSet(setKey, { isActive: true });
       }
@@ -79,6 +83,13 @@ export default {
       });
     }
   },
+  watch: {
+    async exerciseFinished(isFinished) {
+      if (isFinished) {
+        await axios.patch(`/trainings/${this.exerciseId}`, { ...this.exercise, sets: undefined });
+      }
+    }
+  },
   computed: {
     unfinishedSet() {
       return this.exercise.sets.findIndex(set => set.finished==false);
@@ -89,11 +100,8 @@ export default {
     exerciseFinished() {
       return (this.unfinishedSet == -1) && (this.exercise.sets.length > 0) ? true: false;
     },
-    leng() {
-      return this.exercise.sets.length
-    },
-    exerciseDuration() {
-      return this.$store.getters.exerciseDuration;
+    exerciseDurationInMins() {
+      return parseInt(this.exercise.duration / 60);
     }
   }
 }
