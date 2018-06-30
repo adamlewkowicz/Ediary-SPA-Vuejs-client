@@ -59,8 +59,9 @@ export default {
     },
     startBreak() {
       clearInterval(this.interval);
-      this.activeBreak = true;
+      if (this.set.break < 10) this.updateExerciseSet({ break: 10 });
       this.countBreakTime = this.set.break;
+      this.activeBreak = true;
       this.interval = setInterval(() => {
         this.countBreakTime--;
         if (this.countBreakTime < 1) {
@@ -117,7 +118,7 @@ export default {
 tr {
   &:hover {
     cursor: pointer;
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0,0,0,.05);
   }
 }
 

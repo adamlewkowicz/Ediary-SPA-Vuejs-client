@@ -9,7 +9,7 @@
           :class="{ 'selected-day' : day.selected }"
           @click="CHANGE_PICKED_DATE(day.date)"
         >
-          <div v-if="overlapSet[day.date]" class="dot-overlap">
+          <div v-if="overlapSet[day.date] >= 0" class="dot-overlap">
             {{ overlapSet[day.date] == 0 ? '0' : parseInt(overlapSet[day.date]) }}
           </div>
           {{ day.day }}
@@ -159,6 +159,12 @@ button {
   &:not(.selected-day) {
     background-image: linear-gradient(to top, rgba(255,255,255,0.05), rgba(255,255,255,.1));
     background-position-y: 70px;
+    @include phone {
+      background-position-y: 60px;
+    }
+    @include small {
+      background-position-y: 44px;
+    }
   }
   &:hover:not(.selected-day) {
     cursor: pointer;

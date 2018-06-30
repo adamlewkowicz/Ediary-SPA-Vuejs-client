@@ -47,10 +47,11 @@ export default {
     margin: 0;
   }
   @include phone {
-    padding: 0;
+    padding: 5px;
   }
   &.training-mode {
-    padding: 0px;
+    padding: 20px;
+    margin: 0;
     // background-color: #6c5ce7;
   }
 }
@@ -77,10 +78,4 @@ export default {
     transform: rotate(360deg);
   }
 }
-
-// input[type=text] {
-
-//   box-sizing: border-box;
-//   display: block;
-// }
 </style>

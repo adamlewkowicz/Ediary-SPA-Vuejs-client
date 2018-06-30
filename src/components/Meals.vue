@@ -127,7 +127,7 @@ export default {
 
 <style lang="scss" scoped>
 article {
-  margin-top: 50px;
+  margin-top: 25px;
   position: relative;
   h3 {
     margin-bottom: 25px;
@@ -142,7 +142,6 @@ article {
   margin-bottom: 20px;
   font-size: 28px;
   font-weight: 300;
-  // margin: 0px 0px 30px 0;
   &:after {
     content: "";
     height: 4px;
@@ -184,6 +183,18 @@ article {
   }
 }
 
+.box {
+  margin-bottom: 35px;
+  @include phone {
+    padding: 5px;
+    th, tfoot > tr > td  {
+      &:not(:first-child):not(:nth-child(2)):not(:last-child) {
+        padding: 12px 2px;
+      }
+    }
+  }
+}
+
 .edit-name-btn {
   @extend %clearBtn;
   background: url($icoUrl + "pencil.png") center no-repeat;
@@ -211,9 +222,6 @@ article {
   }
   tbody {
     tr {
-      // &:nth-child(even) {
-      //   background-color: #f9f9f9;
-      // }
       input[type=number] {
         &:nth-child(odd) {
           background-color: red;

@@ -85,7 +85,8 @@ export default {
   width: 200px;
   // font-size: 16px;
   color: #fff;
-  margin: 20px auto;
+  margin: 0 auto;
+  margin-bottom: 20px;
   display: block;
   background-color: #1e90ff;
   // background-color: #a55eea;

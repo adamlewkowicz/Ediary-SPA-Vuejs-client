@@ -1,12 +1,11 @@
 <template>
   <section class="box">
     <h1>{{ exercise.name }}</h1>
-    <p>Przerwa między seriami: {{ exercise.break }} s</p>
     <button
       class="start-exercise-btn"
-      @click="activeSet=0; isTraining=true"
+      @click="restartExercise"
     >
-      {{ (isTraining || exerciseFinished) ? 'Rozpocznij ponownie' : 'Rozpocznij' }}
+      {{ (exerciseFinished || isTraining) ? 'Rozpocznij ponownie' : 'Rozpocznij' }}
     </button>
     <p v-for="(error, errorKey) in errors" :key="errorKey">
       {{ error }}
@@ -59,13 +58,13 @@ export default {
   methods: {
     ...mapMutations(['UPDATE_EXERCISE_SET']),
     jumpToNextSet(setKey) {
-      if (this.unfinishedSet > 0) {
+      if (this.unfinishedSet > -1) {
         this.updateExerciseSet(this.unfinishedSet, { isActive: true });
       }
     },
     activateSet(set, setKey) {
       this.errors = [];
-      if (this.isTraining) {
+      if (this.isTraining && !set.isActive) {
         this.errors.push('Skończ bieżącą serię aby zacząć następną');
       } else if (set.finished==true) {
         if (confirm(`Czy chcesz powtórzyć tą (${setKey+1}) serię?`)) {
@@ -81,6 +80,17 @@ export default {
         setKey,
         set
       });
+    },
+    restartExercise() {
+      if (this.exerciseFinished) {
+        this.exercise.sets.forEach((set, setKey) => {
+          const updateProps = { finished: false, time: 0 };
+          if (setKey == 0) this.updateExerciseSet(setKey, { ...updateProps, isActive: true });
+          else this.updateExerciseSet(setKey, updateProps);
+        });
+      } else {
+        this.jumpToNextSet();
+      }
     }
   },
   watch: {
@@ -110,7 +120,8 @@ export default {
 <style lang="scss" scoped>
 .set {
   &:hover {
-    background-color: #ecf0f1;
+    // background-color: #ecf0f1;
+    border-radius: 12px;
   }
 }
 
@@ -127,6 +138,17 @@ export default {
   margin-top: 30px;
 }
 
+table {
+  border-collapse: collapse;
+  th {
+    padding: 5px;
+  }
+}
+
+.box {
+  margin-bottom: 50px;
+}
+
 section {
   // background-color: #fff;
   padding: 40px;
@@ -138,7 +160,6 @@ section {
   table {
     width: 100%;
     margin-top: 50px;
-
   }
 }
 </style>
