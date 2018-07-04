@@ -6,7 +6,7 @@
       :overlapSet="numberOfExercises"
     />
 
-    <button @click="CHANGE_TRAINING_MODE" class="mode-changer">
+    <button @click="changeTrainingMode" class="mode-changer">
       {{ trainingMode ? 'Tryb edycji' : 'Tryb treningowy' }}
     </button>
 
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import BarDatePicker from '@/components/BarDatePicker';
 import TrainingCreator from '@/components/TrainingCreator';
@@ -54,7 +54,15 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['CHANGE_TRAINING_MODE'])
+    changeTrainingMode() {
+      if (!this.dailyTrainings.length) {
+        alert('Aby włączyć tryb treningowy musisz dodać jakieś ćwiczenia');
+      } else if (!this.dailyTrainings[0].sets.length) {
+        alert('Aby włączyć tryb treningowy musisz dodać przynajmniej jedną serię do ćwiczenia');
+      } else {
+        this.$store.commit('CHANGE_TRAINING_MODE');
+      }
+    }
   },
   computed: {
     ...mapGetters(['numberOfExercises']),

@@ -69,6 +69,7 @@ section {
 }
 h1 {
   margin-bottom: 40px;
+  font-size: 25px;
 }
 label {
   margin-top: 20px;

@@ -6,7 +6,14 @@
       class="page-wrapper"
       :class="{ 'training-mode': trainingMode }"
     >
-      <h1 v-show="!trainingMode">Dziennik</h1>
+      <div class="page-title-wrapper">
+        <transition name="an">
+          <h1 v-if="!trainingMode" :key="pageTitle" class="page-title">
+            {{ pageTitle }}
+          </h1>
+        </transition>
+      </div>
+
       <router-view />
     </section>
   </div>
@@ -36,6 +43,9 @@ export default {
     },
     isLoggedIn() {
       return this.$store.state.user.isLoggedIn;
+    },
+    pageTitle() {
+      return this.$route.meta.title;
     }
   },
   watch: {
@@ -66,26 +76,38 @@ export default {
   }
 }
 
-.del-btn {
-  background: url($icoUrl + "cancel-x.svg") no-repeat center;
-  transition: background-size .1s;
-  background-size: 16px;
-  width: 100%;
-  min-height: 42px;
-  min-width: 42px;
-  &:hover {
-    background-size: 20px;
-    animation: rotate .5s ease;
-  }
+.page-title-wrapper {
+  height: 60px;
+  display: flex;
+}
+
+.page-title {
+  font-size: 25px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.an-enter {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.an-enter-active {
+  position: absolute;
+  z-index: 0;
+  transition: all 1s ease;
+}
+
+.an-leave-to {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+.an-leave-active {
+  position: absolute;
+  z-index: 0;
+  transition: all .3s ease;
 }
 
 
-@keyframes rotate {
-  0% {
-    transform: rotate(180deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 </style>

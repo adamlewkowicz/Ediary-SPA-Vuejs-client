@@ -35,4 +35,28 @@ label {
   margin: 7px 0;
   display: block;
 }
+
+
+.del-btn {
+  background: url("./assets/img/icons/cancel-x.svg") no-repeat center;
+  transition: background-size .1s;
+  background-size: 16px;
+  width: 100%;
+  min-height: 42px;
+  min-width: 42px;
+  &:hover {
+    background-size: 20px;
+    animation: rotate .5s ease;
+  }
+}
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>

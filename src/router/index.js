@@ -32,19 +32,23 @@ export default new Router({
       children: [
         {
           path: '',
-          component: Homepage
+          component: Homepage,
+          meta: { title: 'Panel główny' }
         },
         {
           path: '/diary',
-          component: Diary
+          component: Diary,
+          meta: { title: 'Dziennik żywieniowy' }
         },
         {
           path: '/training',
-          component: Training
+          component: Training,
+          meta: { title: 'Treningi' }
         },
         {
           path: '/profile',
-          component: Profile
+          component: Profile,
+          meta: { title: 'Profil' }
         }
       ]
     }
