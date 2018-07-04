@@ -78,6 +78,8 @@ export default {
 
 .page-title-wrapper {
   height: 60px;
+  margin-top: 10px;
+  margin-bottom: 50px;
   display: flex;
 }
 

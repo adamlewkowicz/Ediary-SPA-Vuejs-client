@@ -7,7 +7,8 @@ const roundNum = val => Math.round(val * 100) / 100;
 const measurements = {
   state: {
     weight: 0,
-    bodyFat: 13.3 / 100
+    bodyFat: 13.3 / 100,
+    weightGoal: 'maintain'
   },
   mutations: {
     GET_MEAS (state, payload) {
@@ -23,6 +24,11 @@ const measurements = {
     ADD_WEIGHT (state, payload) {
       state.weight = payload.value;
       state.general.all.waga.push(payload);
+    },
+    UPDATE_MEAS (state, payload) {
+      for (let prop in payload) {
+        state[prop] = payload[prop];
+      }
     }
   },
   actions: {
@@ -36,14 +42,26 @@ const measurements = {
   },
   getters: {
     macroNeeds: state => {
-      const weight = state.weight;
-      const calcMacro = {
-        carbs: roundNum(2.2 * weight),
-        prots: roundNum(4.4 * weight),
-        fats: roundNum(0.9 * weight)
+      const { weight } = state;
+
+      const getMacro = (carbs, prots, fats) => {
+        const calcMacro = {
+          carbs: roundNum(carbs * weight),
+          prots: roundNum(prots * weight),
+          fats: roundNum(fats * weight)
+        }
+        calcMacro.kcals = roundNum(calcMacro.carbs * 4 + calcMacro.prots * 4 + calcMacro.fats * 9);
+        return calcMacro;
       }
-      calcMacro.kcals = calcMacro.carbs * 4 + calcMacro.prots * 4 + calcMacro.fats * 9
-      return calcMacro
+
+      return {
+        loss: getMacro(2.2, 2.6, 0.45),
+        maintain: getMacro(3.5, 2.2, 0.8),
+        increase: getMacro(4.4, 2.2, 0.9)
+      }
+    },
+    goalMacroNeeds: (state, getters) => {
+      return getters.macroNeeds[state.weightGoal];
     },
     LBM: state => roundNum((1 - state.bodyFat) * state.weight),
     BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),

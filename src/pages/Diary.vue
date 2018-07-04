@@ -19,6 +19,7 @@
       :meal="meal"
       :mealKey="meal.mealKey"
       :mealId="meal.id"
+      class="meals"
     />
 
   </div>
@@ -91,6 +92,12 @@ export default {
   width: 35px;
   &:hover, &:focus {
     cursor: pointer;
+  }
+}
+
+.meals {
+  &:last-child {
+    margin-bottom: 220px;
   }
 }
 

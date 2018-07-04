@@ -27,6 +27,7 @@ const sleep3 = (ms = 1000, variable, fn) => {
 const diary = {
   state: {
     meals: [],
+    macroEls: ['carbs', 'prots', 'fats', 'kcals']
   },
   mutations: {
     GET_MEALS (state, payload) {
@@ -99,22 +100,22 @@ const diary = {
   getters: {
     calcedMeals: state => {
       const sumMacro = (macroName, products) => products.reduce((sum, product) => roundNum(sum += Number(product[macroName])), 0);
+
       return state.meals.map((meal, index) => ({
         ...meal,
+        date: moment(meal.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
         mealKey: index,
-        products: [
-          ...meal.products.map(product => {
-            const weightScale = product.portionWeight / 100;
-            const scaleMacro = macroVal => roundNum(macroVal * weightScale);
-            return {
-              ...product,
-              carbs: scaleMacro(product.carbs),
-              prots: scaleMacro(product.prots),
-              fats: scaleMacro(product.fats),
-              kcals: scaleMacro(product.kcals)
-            }
-          })
-        ]
+        products: meal.products.map(product => {
+          const weightScale = product.portionWeight / 100;
+          const scaleMacro = macroVal => roundNum(macroVal * weightScale);
+          return {
+            ...product,
+            carbs: scaleMacro(product.carbs),
+            prots: scaleMacro(product.prots),
+            fats: scaleMacro(product.fats),
+            kcals: scaleMacro(product.kcals)
+          }
+        })
       })).map(meal => ({
         ...meal,
         carbs: sumMacro('carbs', meal.products),
@@ -125,7 +126,7 @@ const diary = {
     },
     weeklyMeals: (state, getters) => {
       return getters.calcedMeals.reduce((prev, current) => {
-        const date = moment(current.date, 'YYYY-MM-DD').add(0, 'day').format('YYYY-MM-DD');
+        const date = moment(current.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
         prev[date] = prev[date] || [];
         prev[date] = [...prev[date], current];
         return prev;
@@ -137,6 +138,35 @@ const diary = {
         ...meals,
         [mealDate]: weeklyM[mealDate].reduce((sumMacro, meal) => sumMacro += meal.kcals, 0)
       }), {});
+    },
+    todaysMeals: (state, getters, rootState) => {
+      const pickedDate = rootState.date.picked;
+      const pickedDateMeals = getters.calcedMeals.filter(meal => meal.date == pickedDate);
+      return pickedDateMeals.length ? pickedDateMeals : [];
+    },
+    todaysMealsMacro: (state, getters, rootState, rootGetters) => {
+      const sumMacro = getters.todaysMeals.reduce((macro, meal) => {
+        const sumMacro = prop => roundNum(macro[prop] + meal[prop]);
+        return {
+          carbs: sumMacro('carbs'),
+          prots: sumMacro('prots'),
+          fats: sumMacro('fats'),
+          kcals: sumMacro('kcals')
+        }
+      }, { carbs: 0, prots: 0, fats: 0, kcals: 0 });
+      const goalNeeds = rootGetters.goalMacroNeeds;
+      const macro =
+      ['carbs', 'prots', 'fats', 'kcals']
+        .reduce((macro, prop) => macro[prop] - sumMacro[prop], goalNeeds);
+
+      return macro;
+      return {
+        carbs: goalNeeds.carbs - sumMacro.carbs,
+        prots: goalNeeds.prots - sumMacro.prots,
+        fats: goalNeeds.fats - sumMacro.fats,
+        kcals: goalNeeds.kcals - sumMacro.kcals,
+      }
+      return sumMacro;
     }
   }
 }

@@ -14,7 +14,21 @@
           <tr><td>Waga:</td> <td>{{ meas.weight }}</td></tr>
           <tr>
             <td>Kalorie:</td>
-            <td></td>
+            <td>{{ macroNeeds[weightGoal].kcals }}</td>
+          </tr>
+          <tr>
+            <td>Chcę</td>
+            <td>
+              <select v-model="weightGoal">
+                <option
+                  v-for="goal in weightGoalOps"
+                  :value="goal.value"
+                  :key="goal.value"
+                >
+                  {{ goal.text }}
+                </option>
+              </select>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -56,7 +70,7 @@
 
 <script>
 import moment from 'moment';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import FormElements from '@/components/FormElements';
 import UserData from '@/components/UserData';
 
@@ -64,7 +78,13 @@ export default {
   components: { FormElements, UserData },
   data() {
     return {
-      ok: null
+      ok: null,
+      weightGoal: 'maintain',
+      weightGoalOps: [
+        { value: 'loss', text: 'Zmniejszyć wagę' },
+        { value: 'maintain', text: 'Utrzymać wagę' },
+        { value: 'increase', text: 'Zwiększyć wagę' },
+      ]
     }
   },
   methods: {
@@ -74,6 +94,7 @@ export default {
     ...mapState({
       meas: state => state.measurements
     }),
+    ...mapGetters(['macroNeeds']),
     todaysDate() {
       return moment().format('YYYY-MM-DD HH:mm:ss');
     },
