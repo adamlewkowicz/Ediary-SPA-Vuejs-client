@@ -3,7 +3,7 @@
     <input type="text" v-model="productName" @input="delayInput" class="searcher" placeholder="Nazwa produktu..."/>
     <div class="products-result" v-if="products.length">
       <ul>
-        <li v-for="(product, productKey) in products" :key="productKey" @click="addProduct(productKey)">
+        <li v-for="(product, productKey) in products" :key="productKey" @click="addProduct(product)">
           <p>{{ product.name }}</p>
           <div class="product-details">
             {{ product.source }}
@@ -38,17 +38,20 @@ export default {
       this.timeOut = setTimeout(() => this.getProducts(), 200);
     },
     async getProducts() {
-      const { data: { products }} = await axios.get(`/products/ilewazy/${this.productName}`);
-      this.products = products;
+      if (this.productName.length > 0) {
+        const getProducts = await axios.get(`/products/${this.productName}`);
+        this.products = getProducts.data.products;
+      } else {
+        this.products = [];
+      }
     },
-    async addProduct (productKey) {
+    async addProduct (product) {
       const { mealKey, mealId } = this;
       const payload = { mealKey, mealId };
-      const productFound = this.products[productKey];
-      if (!productFound.fetched) {
-        payload.product = await this.postProduct(productFound.url);
+      if (!product.saved) {
+        payload.product = await this.postProduct(product);
       } else {
-        payload.product = productFound;
+        payload.product = product;
       }
       payload.product.showDetails = false;
       this.checkDuplicates({
@@ -58,9 +61,9 @@ export default {
       this.products = [];
       this.productName = '';
     },
-    async postProduct (url) {
-      const { data: { product }} = await axios.post(`/products/ilewazy`, { url });
-      return { ...product, showDetails: false };
+    async postProduct (product) {
+      const postProduct = await axios.post(`/products`, product);
+      return { id: postProduct.data.id, ...product };
     },
     checkDuplicates (payload) {
       const productIndex = this.meal.products.findIndex(product => product.id == payload.productId);

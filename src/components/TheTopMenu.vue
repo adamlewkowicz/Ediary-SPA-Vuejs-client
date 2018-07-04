@@ -6,16 +6,18 @@
     <button class="btn" @click="redirect('profile')">
       <img src="./../assets/img/icons/person.png"/>
     </button>
-    Ustawienia
-    <button class="btn" @click="redirect('settings')">
+    Wyloguj się
+    <button class="btn" @click="logout">
       <img src="./../assets/img/icons/settings.png"/>
     </button>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   methods: {
+    ...mapActions(['logout']),
     redirect(route) {
       this.$router.push(`/${route}`);
     }

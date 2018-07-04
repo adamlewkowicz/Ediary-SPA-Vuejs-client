@@ -26,9 +26,7 @@ export default {
   props: {
     overlapSet: {
       type: Object,
-      default () {
-        return {}
-      }
+      default: () => ({})
     }
   },
   methods: {

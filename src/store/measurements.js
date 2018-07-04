@@ -15,7 +15,7 @@ const measurements = {
       for (let prop in meas) {
         state[prop] = meas[prop];
       }
-      state.weight = parseFloat(meas.all.find(meas => meas.name == 'waga').value);
+      state.weight = meas.all ? parseFloat(meas.all.find(meas => meas.name == 'waga').value) : 0;
     },
     ADD_MEAS (state, payload) {
 

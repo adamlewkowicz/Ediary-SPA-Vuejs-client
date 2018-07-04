@@ -33,6 +33,16 @@ export default {
     },
     pickedDate () {
       return this.$store.state.date.pickedWeek;
+    },
+    isLoggedIn() {
+      return this.$store.state.user.isLoggedIn;
+    }
+  },
+  watch: {
+    isLoggedIn(loginStatus) {
+      if (!loginStatus) {
+        this.$router.push('/login');
+      }
     }
   }
 }
