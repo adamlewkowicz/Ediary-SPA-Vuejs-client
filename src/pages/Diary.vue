@@ -50,13 +50,16 @@ export default {
     addMeal() {
       this.$store.dispatch('addMeal', {
         name: 'Posiłek',
-        date: this.pickedDate,
+        date: `${this.pickedDate} ${this.getCurrentTime()}`,
         carbs: 0,
         prots: 0,
         fats: 0,
         kcals: 0,
         products: []
       });
+    },
+    getCurrentTime() {
+      return moment().format('HH:mm:ss');
     }
   },
   computed: {

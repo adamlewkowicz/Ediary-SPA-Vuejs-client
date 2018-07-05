@@ -144,8 +144,8 @@ const diary = {
       const pickedDateMeals = getters.calcedMeals.filter(meal => meal.date == pickedDate);
       return pickedDateMeals.length ? pickedDateMeals : [];
     },
-    todaysMealsMacro: (state, getters, rootState, rootGetters) => {
-      const sumMacro = getters.todaysMeals.reduce((macro, meal) => {
+    todaysMealsMacro: (state, getters) => {
+      return getters.todaysMeals.reduce((macro, meal) => {
         const sumMacro = prop => roundNum(macro[prop] + meal[prop]);
         return {
           carbs: sumMacro('carbs'),
@@ -154,19 +154,15 @@ const diary = {
           kcals: sumMacro('kcals')
         }
       }, { carbs: 0, prots: 0, fats: 0, kcals: 0 });
-      const goalNeeds = rootGetters.goalMacroNeeds;
-      const macro =
-      ['carbs', 'prots', 'fats', 'kcals']
-        .reduce((macro, prop) => macro[prop] - sumMacro[prop], goalNeeds);
-
-      return macro;
-      return {
-        carbs: goalNeeds.carbs - sumMacro.carbs,
-        prots: goalNeeds.prots - sumMacro.prots,
-        fats: goalNeeds.fats - sumMacro.fats,
-        kcals: goalNeeds.kcals - sumMacro.kcals,
-      }
-      return sumMacro;
+    },
+    todaysMealsMacroGoalNeeds: (state, getters, rootState, rootGetters) => {
+      const dailyMacro = getters.todaysMealsMacro;
+      return state.macroEls
+        .reduce((macro, prop) => {
+          const subtractMacro = roundNum(macro[prop] - dailyMacro[prop]);
+          const finalVal =  subtractMacro < 0 ? subtractMacro * -1 : subtractMacro;
+          return {...macro, [prop]: finalVal }
+        }, rootGetters.goalMacroNeeds);
     }
   }
 }

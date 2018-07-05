@@ -1,5 +1,8 @@
 <template>
   <div id="menu_wrapper">
+    <div class="macro-snippet">
+      <span>Dzisiaj zjadłeś</span> <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
+    </div>
     <div class="user">
     </div>
     Profil
@@ -14,14 +17,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   methods: {
     ...mapActions(['logout']),
     redirect(route) {
       this.$router.push(`/${route}`);
     }
-  }
+  },
+  computed: mapGetters([
+    'todaysMealsMacro',
+    'goalMacroNeeds',
+    'todaysMealsMacroGoalNeeds'
+  ])
 }
 </script>
 
@@ -39,6 +47,14 @@ export default {
   @include tablet {
     margin: 0;
   }
+}
+
+span {
+  margin-right: 10px;
+}
+
+.macro-snippet {
+  margin-right: 40px;
 }
 
 .btn {
