@@ -86,6 +86,7 @@ const diary = {
       await axios.post(`/meals/${payload.mealId}/${productId}`, { portionWeight });
     },
     async updateMealProduct ({ commit }, payload) {
+      payload.product.portionWeight > 5000 ? payload.product.portionWeight = 5000 : payload.product.portionWeight;
       commit('UPDATE_MEAL_PRODUCT', payload);
       clearTimeout(timeOut1);
       timeOut1 = setTimeout(async () => {

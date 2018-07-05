@@ -1,5 +1,15 @@
 <template>
   <div id="menu_wrapper">
+
+    <!-- <bar-chart
+      v-if="todaysMealsMacro.kcals"
+      class="bar-chart"
+      :chartData="barChartData"
+      :options="chartOpts"
+      height="70"
+    /> -->
+
+
     <div class="macro-snippet">
       <span>Dzisiaj zjadłeś</span> <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
     </div>
@@ -18,18 +28,91 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import DoughnutChart from '@/components/DoughnutChart';
+import BarChart from '@/components/BarChart';
+
 export default {
+  components: {
+    DoughnutChart,
+    BarChart
+  },
   methods: {
     ...mapActions(['logout']),
     redirect(route) {
       this.$router.push(`/${route}`);
     }
   },
-  computed: mapGetters([
-    'todaysMealsMacro',
-    'goalMacroNeeds',
-    'todaysMealsMacroGoalNeeds'
-  ])
+  computed: {
+    ...mapGetters([
+      'todaysMealsMacro',
+      'goalMacroNeeds'
+    ]),
+    chartData() {
+      const { carbs, prots, fats } = this.todaysMealsMacro;
+      return {
+        datasets: [{
+          data: [carbs, prots, fats],
+          backgroundColor: [
+            "#FF6384",
+            "#8eaf34",
+            "#FFCE56"
+          ],
+        }],
+        labels: [
+          'Węglowodany',
+          'Białko',
+          'Tłuszcze'
+        ]
+      }
+    },
+    barChartData() {
+      const { carbs, prots, fats, kcals } = this.todaysMealsMacro;
+      return {
+        labels: ['Węglowodany', 'Białko', 'Tłuszcze'],
+        datasets: [
+          {
+            backgroundColor: [
+              "#FF6384",
+              "#8eaf34",
+              "#FFCE56"
+            ],
+            data: [carbs, prots, fats]
+          }
+        ]
+      }
+    },
+    chartOpts() {
+      return {
+        responsive: true,
+        legend: {
+          display: false
+        },
+        scales: {
+            yAxes: [{
+                gridLines: {
+                  display: false
+                },
+                ticks: {
+                    display: true
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                  display: false
+                },
+                ticks: {
+                    display: false
+                }
+            }],
+        }
+      }
+    }
+  },
+  // computed: mapGetters([
+  //   'todaysMealsMacro',
+  //   'goalMacroNeeds',
+  //   'todaysMealsMacroGoalNeeds'
+  // ])
 }
 </script>
 
@@ -47,6 +130,14 @@ export default {
   @include tablet {
     margin: 0;
   }
+}
+
+.bar-chart {
+  justify-self: start;
+  margin-right: auto;
+  position: relative;
+  top: 3px;
+  left: -20px;
 }
 
 span {
