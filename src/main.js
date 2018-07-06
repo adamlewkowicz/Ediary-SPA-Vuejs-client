@@ -6,14 +6,10 @@ import axios from 'axios';
 import router from './router';
 import { store } from './store/store';
 
-// Vue.use(axios);
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoic29rcmF0MzNzIiwicGVybWlzc2lvbnMiOjAsInZlcmlmaWVkIjowLCJpYXQiOjE1MzAxMzU3MjgsImV4cCI6MTUzMDM5NDkyOH0.rdqrACJCdBjgZ1M1wUh2p5memL6D5375R8is1mPaUAQ`;
-
-axios.defaults.baseURL = 'http://localhost:3000';
-// axios.defaults.baseURL = 'http://35.237.225.49:8080';
+axios.defaults.baseURL = process.env.NODE_ENV == 'development' ? 'http://localhost:3000' : 'https://ediary-api.tk/api/';
+// axios.defaults.baseURL = 'https://ediary-api.tk/api/';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-// axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('auth-token') || '';
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth-token') || '';
 
 Vue.config.productionTip = false

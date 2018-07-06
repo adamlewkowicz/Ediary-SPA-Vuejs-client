@@ -23,8 +23,8 @@ export default {
   data() {
     return {
       credentials: {
-        email: 'randLogi',
-        password: 'Testiiz'
+        email: 'testaccount',
+        password: 'envEirra'
       },
       errors: []
     }
@@ -32,8 +32,8 @@ export default {
   methods: {
     login() {
       this.errors = [];
-      const loginProps = Object.values(this.credentials);
-      if (loginProps.some(val => val.length < 4)) {
+      const loginVals = Object.values(this.credentials);
+      if (loginVals.some(val => val.length < 4)) {
         this.errors.push('Długość emaila i hasła musi być dłuższa niż 4');
       } else {
         this.$store.dispatch('login', this.credentials);
