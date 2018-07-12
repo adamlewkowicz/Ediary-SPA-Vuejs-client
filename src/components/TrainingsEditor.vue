@@ -2,6 +2,28 @@
   <div>
     <h2>{{ exercise.name }}</h2>
     <div class="box">
+      Czas przerwy dla każdego z powtórzeń:
+      <div class="sets-duration-setter">
+        <input
+          type="range"
+          v-model="setsBreakInSeconds"
+          min="0"
+          max="300"
+        />
+        <input
+          type="text"
+          :value="setsBreakTime.minutes"
+          @input="updateBreakTime($event, 'min')"
+        />
+        min.
+        <input
+          type="text"
+          :value="setsBreakTime.seconds"
+          @input="updateBreakTime($event)"
+        />
+        sek.
+      </div>
+
       <table class="center-table">
         <thead>
           <th>Seria</th>
@@ -51,11 +73,23 @@ export default {
   components: {
     TrainingsSetsEditor
   },
+  data() {
+    return {
+      setsBreakInSeconds: 60
+    }
+  },
   computed: {
     meta () {
       return {
         exerciseKey: this.exerciseKey,
         exerciseId: this.exerciseId
+      }
+    },
+    setsBreakTime() {
+      const setsBreakInMinutes = parseInt(this.setsBreakInSeconds / 60);
+      return {
+        minutes: setsBreakInMinutes,
+        seconds: this.setsBreakInSeconds - setsBreakInMinutes * 60
       }
     },
     additionalSetProps () {
@@ -64,6 +98,15 @@ export default {
   },
   methods: {
     ...mapActions(['deleteExercise']),
+    updateBreakTime(event, timeUnit) {
+      if (event.target.value > 900) {
+        this.setsBreakInSeconds = 900;
+      } else if (timeUnit == 'min') {
+        this.setsBreakInSeconds = event.target.value * 60 + this.setsBreakTime.seconds;
+      } else {
+        this.setsBreakInSeconds = 31;
+      }
+    },
     addExerciseSet() {
       this.$store.dispatch('addExerciseSet', {
         ...this.meta,
@@ -101,6 +144,20 @@ h2 {
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: 300;
+}
+
+.sets-duration-setter {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  input[type=range] {
+    margin-right: 40px;
+  }
+  input[type=text] {
+    width: 44px;
+    height: 44px;
+    text-align: center;
+  }
 }
 
 .add-set-btn {

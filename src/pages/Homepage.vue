@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box">
+    <div class="box" v-if="userHasMeasurements">
       <div class="chart-wrapper">
         <doughnut-chart :chartData="chartData" />
       </div>
@@ -17,7 +17,10 @@ export default {
     DoughnutChart
   },
   computed: {
-    ...mapGetters(['todaysMealsMacro']),
+    ...mapGetters([
+      'todaysMealsMacro',
+      'userHasMeasurements'
+    ]),
     chartData() {
       const { carbs, prots, fats } = this.todaysMealsMacro;
       return {

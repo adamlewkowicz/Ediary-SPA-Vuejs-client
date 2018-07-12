@@ -42,7 +42,7 @@ export default {
     },
     week() {
       const sevenDays = [];
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 7; i++) {
         const date = moment(this.date.pickedWeek).add(i, 'day');
         const dateFormatted = moment(date).format('YYYY-MM-DD');
         const selected = (dateFormatted == this.date.picked) ? true : false;
@@ -132,6 +132,7 @@ button {
 }
 
 .datepicker {
+  user-select: none;
   background-color: #342843;
   color: #fff;
   display: flex;

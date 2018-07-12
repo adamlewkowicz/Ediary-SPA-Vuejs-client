@@ -65,7 +65,8 @@ const measurements = {
     },
     LBM: state => roundNum((1 - state.bodyFat) * state.weight),
     BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),
-    TDEE: (state, getters) => roundNum(getters.BMR * 1.2)
+    TDEE: (state, getters) => roundNum(getters.BMR * 1.2),
+    userHasMeasurements: state => state.weight > 0 ? true : false
   }
 }
 

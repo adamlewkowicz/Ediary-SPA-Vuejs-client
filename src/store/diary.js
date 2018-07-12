@@ -3,26 +3,13 @@ import axios from 'axios';
 import moment from 'moment';
 
 const roundNum = val => Math.round(val * 10) / 10;
-let timeOut1 = null;
-const sleep = (ms, variable) => new Promise(resolve => {
-  clearTimeout(variable);
-  variable = setTimeout(resolve, ms);
-});
 
-const sleep2 = (ms = 1000, variable, fn) => new Promise(resolve => {
-  clearTimeout(variable);
-  variable = setTimeout(async () => {
-    await fn();
-    resolve();
-  }, ms);
-});
+let timeout = null;
 
-const sleep3 = (ms = 1000, variable, fn) => {
-  clearTimeout(variable);
-  variable = setTimeout(async () => {
-    await fn();
-  }, ms);
-};
+const delayAction = (fn, ms = 500) => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => fn(), ms);
+}
 
 const diary = {
   state: {

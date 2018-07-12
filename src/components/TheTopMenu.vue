@@ -9,20 +9,23 @@
       height="70"
     /> -->
 
+    <transition name="fade">
+      <div class="macro-snippet" v-if="userHasMeasurements">
+        <span>Dzisiaj zjadłeś</span>
+        <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
+      </div>
+    </transition>
 
-    <div class="macro-snippet">
-      <span>Dzisiaj zjadłeś</span> <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
-    </div>
-    <div class="user">
-    </div>
-    Profil
-    <button class="btn" @click="redirect('profile')">
+    <button @click="redirect('profile')">
+      <span>Profil</span>
       <img src="./../assets/img/icons/person.png"/>
     </button>
-    Wyloguj się
-    <button class="btn" @click="logout">
+
+    <button @click="logout">
+      <span>Wyloguj się</span>
       <img src="./../assets/img/icons/settings.png"/>
     </button>
+
   </div>
 </template>
 
@@ -45,7 +48,8 @@ export default {
   computed: {
     ...mapGetters([
       'todaysMealsMacro',
-      'goalMacroNeeds'
+      'goalMacroNeeds',
+      'userHasMeasurements'
     ]),
     chartData() {
       const { carbs, prots, fats } = this.todaysMealsMacro;
@@ -130,6 +134,14 @@ export default {
   @include tablet {
     margin: 0;
   }
+  @include phone {
+    padding: 0 25px;
+  }
+  @include small {
+    span {
+      display: none;
+    }
+  }
 }
 
 .bar-chart {
@@ -146,19 +158,20 @@ span {
 
 .macro-snippet {
   margin-right: 40px;
+  @include small {
+    margin-right: 10px;
+  }
 }
 
-.btn {
-  border-style: none;
+button {
+  min-height: 44px;
+  min-width: 44px;
   background-color: #fff;
-  padding: 0 10px;
-  &:hover {
-    cursor: pointer;
-  }
+  display: flex;
+  align-items: center;
   &:not(:last-child) {
-    margin-right: 30px;
+    margin-right: 10px;
   }
-  outline: 0;
 }
 </style>
 

@@ -3,20 +3,6 @@ import axios from "axios";
 import moment from "moment";
 
 const training = {
-  // state: {
-  //   exercises: [{
-  //     break: 5,
-  //     date: "2018-06-29 13:40:45",
-  //     finished: false,
-  //     id: 87,
-  //     name: "Martwy ciąg",
-  //     nameId: 2,
-  //     sets: [
-  //       { id: 114, loadweight: 0, repeats: 0, finished: false, break: 5, time: 0, isActive: false },
-  //       { id: 115, loadweight: 0, repeats: 0, finished: false, break: 6, time: 0, isActive: false }
-  //     ]
-  //   }]
-  // },
   state: {
     exercises: [],
     additionalSetProps: {
@@ -80,6 +66,10 @@ const training = {
     async updateExerciseSet ({ commit }, payload) {
       commit('UPDATE_EXERCISE_SET', payload);
       await axios.patch(`/trainings/${payload.exerciseId}/${payload.setId}`, payload.set);
+    },
+    async updateAllExerciseSets ({ commit }, payload) {
+      commit('UPDATE_ALL_EXERCISE_SETS', payload);
+      await axios.patch(`/trainings/`)
     },
     async deleteExerciseSet ({ commit }, payload) {
       commit('DELETE_EXERCISE_SET', payload);

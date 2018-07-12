@@ -1,29 +1,11 @@
 <template>
   <article class="meal-wrapper">
-    <h3 class="meal-name" :class="{ 'animated-bar': editName }">
-      <form v-if="editName"
-        @submit.prevent="updateMeal({
-          meal: { name: $event.target.elements.newMealName.value },
-          mealKey,
-          mealId
-        }); editName = !editName"
-      >
-        <input type="text" :value="meal.name" name="newMealName" class="edit-meal-name">
-        <button type="submit">Zapisz</button>
-        <button type="button" @click="editName = !editName">Anuluj</button>
-      </form>
-      <div v-else>
-        {{ meal.name }}
-        <button
-          @click="editName=!editName"
-          class="edit-name-btn"
-        ></button>
-      </div>
-    </h3>
 
-    <div>
-      <!-- <p>ID: {{ mealId }}</p> -->
-    </div>
+    <meal-name-editor
+      :mealKey="mealKey"
+      :mealId="mealId"
+      :meal="meal"
+    />
 
     <section class="box">
       <table class="meals-table">
@@ -78,11 +60,13 @@
 <script>
 import { mapActions } from 'vuex';
 import axios from 'axios';
+import MealNameEditor from '@/components/MealNameEditor';
 import MealsProducts from '@/components/MealsProducts';
 import ProductSearcher from '@/components/ProductSearcher';
 
 export default {
   components: {
+    MealNameEditor,
     MealsProducts,
     ProductSearcher
   },
@@ -128,62 +112,10 @@ export default {
 <style lang="scss" scoped>
 article {
   margin-top: 25px;
-  position: relative;
-  h3 {
-    margin-bottom: 25px;
-    font-size: 30px;
-    font-weight: normal;
-  }
-}
-
-.meal-name {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 20px;
-  font-size: 28px;
-  font-weight: 300;
-  &:after {
-    content: "";
-    height: 4px;
-    width: 110px;
-    background-color: rgba(46,204,113, .0);
-    position: absolute;
-    top: 34px;
-    border-radius: 5px;
-  }
-}
-
-.animated-bar {
-  &:after {
-    background: linear-gradient(to right,rgba(137, 247, 254, .5), rgba(102, 166, 255, .5));
-    background-size: 200% 200%;
-    animation: bar 1s ease infinite;
-    // height: 40px;
-  }
-}
-
-.edit-meal-name {
-  min-width: 250px;
-  position: relative;
-  top: 4px;
-  font-size: 20px;
-  font-family: $ff;
-  padding: 0;
-}
-
-@keyframes bar {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 .box {
+  overflow-x: auto;
   margin-bottom: 35px;
   @include phone {
     padding: 5px;
@@ -195,18 +127,10 @@ article {
   }
 }
 
-.edit-name-btn {
-  @extend %clearBtn;
-  background: url($icoUrl + "pencil.png") center no-repeat;
-  background-size: 16px 16px;
-  width: 24px;
-  height: 24px;
-  position: relative;
-  top: 4px;
-  margin-left: 10px;
-}
-
 .meals-table {
+  @include small {
+    font-size: 10px;
+  }
   border-collapse: collapse;
   width: 100%;
   td, th {

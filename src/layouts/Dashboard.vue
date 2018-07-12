@@ -13,8 +13,9 @@
           </h1>
         </transition>
       </div>
-
-      <router-view />
+      <!-- <transition name="fade"> -->
+        <router-view />
+      <!-- </transition> -->
     </section>
   </div>
 </template>

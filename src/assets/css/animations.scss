@@ -1,0 +1,14 @@
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-left-enter {
+  transform: translateX(100px);
+}
+
+.slide-left-enter-active {
+  transition: all 1s ease;
+}
