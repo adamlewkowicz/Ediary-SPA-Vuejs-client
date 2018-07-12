@@ -18,8 +18,13 @@ const measurements = {
       }
       state.weight = meas.all ? parseFloat(meas.all.find(meas => meas.name == 'waga').value) : 0;
     },
-    ADD_MEAS (state, payload) {
+    ADD_GENERAL_MEAS (state, payload) {
 
+    },
+    UPDATE_GENERAL_MEAS (state, payload) {
+      for (let prop in payload) {
+        state[prop] = payload[prop];
+      }
     },
     ADD_WEIGHT (state, payload) {
       state.weight = payload.value;
@@ -34,6 +39,16 @@ const measurements = {
   actions: {
     async getMeas({ commit }) {
       commit('GET_MEAS', await axios.get('/meas'));
+    },
+    async addGeneralMeas ({ commit }, payload) {
+      // commit('ADD_GENERAL_MEAS', payload);
+      console.log(payload)
+      const res = await axios.post(`/meas/general`, payload);
+      console.log(res.data)
+    },
+    async updateGeneralMeas ({ commit }, payload) {
+      commit('UPDATE_GENERAL_MEAS', payload);
+      await axios.patch(`/meas/general`, payload);
     },
     async addMeas({ commit }, payload) {
       const { data: { id }} = await axios.post(`/meas/all`, payload);
@@ -63,10 +78,10 @@ const measurements = {
     goalMacroNeeds: (state, getters) => {
       return getters.macroNeeds[state.weightGoal];
     },
-    LBM: state => roundNum((1 - state.bodyFat) * state.weight),
-    BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),
-    TDEE: (state, getters) => roundNum(getters.BMR * 1.2),
     userHasMeasurements: state => state.weight > 0 ? true : false
+    // LBM: state => roundNum((1 - state.bodyFat) * state.weight),
+    // BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),
+    // TDEE: (state, getters) => roundNum(getters.BMR * 1.2),
   }
 }
 

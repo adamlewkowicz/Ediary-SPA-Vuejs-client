@@ -5,6 +5,7 @@ import moment from 'moment';
 const roundNum = val => Math.round(val * 10) / 10;
 
 let timeout = null;
+let timeOut1 = null;
 
 const delayAction = (fn, ms = 500) => {
   clearTimeout(timeout);
@@ -148,8 +149,8 @@ const diary = {
       return state.macroEls
         .reduce((macro, prop) => {
           const subtractMacro = roundNum(macro[prop] - dailyMacro[prop]);
-          const finalVal =  subtractMacro < 0 ? subtractMacro * -1 : subtractMacro;
-          return {...macro, [prop]: finalVal }
+          // const finalVal =  subtractMacro < 0 ? subtractMacro * -1 : subtractMacro;
+          return {...macro, [prop]: subtractMacro * -1 }
         }, rootGetters.goalMacroNeeds);
     }
   }

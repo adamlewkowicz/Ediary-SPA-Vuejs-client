@@ -36,15 +36,16 @@ export default {
   data() {
     return {
       newUserData: {
-        age: null,
-        weight: null,
-        height: null,
-        man: null
+        age: 31,
+        weight: 47,
+        height: 120,
+        man: true,
+        weightGoal: 'maintain'
       },
       errors: []
     }
   },
-  methods:{
+  methods: {
     addUserData() {
       const uData = this.newUserData;
       this.errors = [];
@@ -56,7 +57,7 @@ export default {
       if (uData.man == null) pushError('Wybierz płeć');
 
       if (!this.errors.length) {
-        // axios.post('qweqweqw')
+        this.$store.dispatch('addGeneralMeas', this.newUserData);
       }
     }
   }

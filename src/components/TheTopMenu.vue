@@ -11,8 +11,16 @@
 
     <transition name="fade">
       <div class="macro-snippet" v-if="userHasMeasurements">
-        <span>Dzisiaj zjadłeś</span>
+        <span>{{ dateName }}</span>
         <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
+        <transition name="fade">
+          <!-- SLIDE IN FROM THE BOTTOM -->
+          <i v-if="showKcalsLeft"
+            class="kcals-left"
+            :class="{ 'red': kcalsAreOver }">
+            {{ neededKcalsLeft }}
+          </i>
+        </transition>
       </div>
     </transition>
 
@@ -31,6 +39,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment';
 import DoughnutChart from '@/components/DoughnutChart';
 import BarChart from '@/components/BarChart';
 
@@ -49,8 +58,44 @@ export default {
     ...mapGetters([
       'todaysMealsMacro',
       'goalMacroNeeds',
-      'userHasMeasurements'
+      'userHasMeasurements',
+      'daysDiffFromToday',
+      'todaysMealsMacroGoalNeeds'
     ]),
+    kcalsAreOver() {
+      return (this.todaysMealsMacroGoalNeeds.kcals > 0) ? true :  false;
+    },
+    neededKcalsLeft() {
+      let kcals = this.todaysMealsMacroGoalNeeds.kcals;
+      return kcals < 0 ?  kcals : `+${kcals}`;
+    },
+    showKcalsLeft() {
+      const kcals = this.todaysMealsMacro.kcals;
+      const kcalsLeft = this.todaysMealsMacroGoalNeeds.kcals;
+      return kcals > 0 && (kcalsLeft < -200 || kcalsLeft > 200) ? true : false;
+    },
+    pickedDate() {
+      return this.$store.state.date.pickedObj;
+    },
+    dateName() {
+      const diffDateObj = moment().add(this.daysDiffFromToday, 'days').locale('pl');
+      let dateName = `Dnia ${diffDateObj.format('DD.MM')}`;
+      if (this.daysDiffFromToday < -2) return dateName += ' zjadłeś';
+      else if (this.daysDiffFromToday > 2) return dateName += ' zjesz';
+
+      switch(this.daysDiffFromToday) {
+        case -2:
+          return 'Przedwczoraj zjadłeś'
+        case -1:
+          return 'Wczoraj zjadłeś'
+        case 0:
+          return 'Dzisiaj zjadłeś'
+        case 1:
+          return 'Jutro zjesz'
+        case 2:
+          return 'Pojutrze zjesz'
+      }
+    },
     chartData() {
       const { carbs, prots, fats } = this.todaysMealsMacro;
       return {
@@ -136,8 +181,6 @@ export default {
   }
   @include phone {
     padding: 0 25px;
-  }
-  @include small {
     span {
       display: none;
     }
@@ -158,9 +201,21 @@ span {
 
 .macro-snippet {
   margin-right: 40px;
+  position: relative;
   @include small {
     margin-right: 10px;
   }
+  .kcals-left {
+    font-style: normal;
+    font-size: 11px;
+    position: absolute;
+    right: 0;
+    top: -14px;
+  }
+}
+
+.red {
+  color: #B53471;
 }
 
 button {

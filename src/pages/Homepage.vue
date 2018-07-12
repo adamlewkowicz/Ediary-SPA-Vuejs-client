@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box" v-if="userHasMeasurements">
+    <div class="box" v-if="userHasMeasurements && todaysMealsMacro.kcals > 0">
       <div class="chart-wrapper">
         <doughnut-chart :chartData="chartData" />
       </div>

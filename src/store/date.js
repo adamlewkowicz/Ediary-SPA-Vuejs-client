@@ -6,6 +6,7 @@ const actualDate = moment();
 const date = {
   state: {
     todays: actualDate.format('YYYY-MM-DD'),
+    todaysObj: actualDate,
     picked: actualDate.format('YYYY-MM-DD'),
     pickedObj: actualDate,
     pickedWeek: moment(actualDate).add(-3, 'days').format('YYYY-MM-DD')
@@ -24,6 +25,11 @@ const date = {
       state.picked = moment(state.pickedWeek, 'YYYY-MM-DD').add(3, 'days').format('YYYY-MM-DD');
     }
   },
+  getters: {
+    daysDiffFromToday: state => {
+      return moment(state.todays, 'YYYY-MM-DD').diff(state.pickedObj, 'day') * -1;
+    }
+  }
 }
 
 export default date;
