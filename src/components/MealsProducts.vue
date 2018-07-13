@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="!product.showDetails" class="default-details">
+  <tr>
     <td>
       {{ product.name | cutNameLength }}
       <!-- <button
@@ -25,32 +25,6 @@
         @click="deleteMealProduct({
           mealKey, mealId, productKey, productId
         })"></button>
-    </td>
-  </tr>
-  <tr v-else>
-    <td colspan="7">
-      <img :src="`http://localhost:3000/${product.img}`"/>
-      <table>
-        <tr>
-          <td>Nazwa:</td>
-          <td>{{ product.name || cutNameLength }}</td>
-        </tr>
-        <tr>
-          <td>Źródło:</td>
-          <td>{{ product.source }}</td>
-        </tr>
-        <tr v-if="product.producer">
-          <td>Producent:</td>
-          <td>{{ product.producer }}</td>
-        </tr>
-        <tr>
-
-        </tr>
-      </table>
-      <button
-        @click="triggerDetails(false)"
-        class=""
-      >D</button>
     </td>
   </tr>
 </template>
@@ -95,6 +69,7 @@ export default {
 
 <style lang="scss" scoped>
 .portion-weight {
+  min-width: 45px;
   width: 50px;
   min-height: 45px;
   text-align: center;
@@ -104,9 +79,8 @@ export default {
   border-style: none;
   color: #056bb5;
   background-color: #fff;
-  // border-bottom: 1px solid #d8d8d8;
 }
-
+/*
 .show-details-btn {
   @extend %clearBtn;
   background: url($icoUrl + "arrow-down.png") no-repeat center;
@@ -118,34 +92,7 @@ export default {
     transform: rotate(0deg);
   }
 }
-
-.btn-del-product {
-  @extend %clearBtn;
-  background-color: #e8e8e8;
-  min-width: 44px;
-  min-height: 44px;
-  &:hover {
-    background-color: #ff7675;
-    color: #fff;
-  }
-}
-
-.default-details {
-  td {
-    // padding: 12px;
-    &:not(:nth-child(2)):not(:last-child) {
-      padding: 12px;
-    }
-    &:not(:first-child) {
-      text-align: center;
-    }
-  }
-}
-
-img {
-  max-width: 250px;
-  max-height: 250px;
-}
+*/
 </style>
 
 

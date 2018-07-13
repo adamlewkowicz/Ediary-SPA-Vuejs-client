@@ -15,9 +15,9 @@
         <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
         <transition name="fade">
           <!-- SLIDE IN FROM THE BOTTOM -->
-          <i v-if="showKcalsLeft"
+          <i v-if="todaysMealsMacro.kcals > 0"
             class="kcals-left"
-            :class="{ 'red': kcalsAreOver }">
+            :class="[kcalsAreOver ? 'rose' : '', kcalsAreFine ? 'green' : '']">
             {{ neededKcalsLeft }}
           </i>
         </transition>
@@ -63,26 +63,21 @@ export default {
       'todaysMealsMacroGoalNeeds'
     ]),
     kcalsAreOver() {
-      return (this.todaysMealsMacroGoalNeeds.kcals > 0) ? true :  false;
+      return this.todaysMealsMacroGoalNeeds.kcals > 200 ? true :  false;
+    },
+    kcalsAreFine() {
+      const kcals = this.todaysMealsMacro.kcals;
+      const kcalsLeft = this.todaysMealsMacroGoalNeeds.kcals;
+      return (kcalsLeft > -200 && kcalsLeft < 200) ? true : false;
     },
     neededKcalsLeft() {
       let kcals = this.todaysMealsMacroGoalNeeds.kcals;
       return kcals < 0 ?  kcals : `+${kcals}`;
     },
-    showKcalsLeft() {
-      const kcals = this.todaysMealsMacro.kcals;
-      const kcalsLeft = this.todaysMealsMacroGoalNeeds.kcals;
-      return kcals > 0 && (kcalsLeft < -200 || kcalsLeft > 200) ? true : false;
-    },
     pickedDate() {
       return this.$store.state.date.pickedObj;
     },
     dateName() {
-      const diffDateObj = moment().add(this.daysDiffFromToday, 'days').locale('pl');
-      let dateName = `Dnia ${diffDateObj.format('DD.MM')}`;
-      if (this.daysDiffFromToday < -2) return dateName += ' zjadłeś';
-      else if (this.daysDiffFromToday > 2) return dateName += ' zjesz';
-
       switch(this.daysDiffFromToday) {
         case -2:
           return 'Przedwczoraj zjadłeś'
@@ -94,6 +89,11 @@ export default {
           return 'Jutro zjesz'
         case 2:
           return 'Pojutrze zjesz'
+        default:
+          const diffDateObj = moment().add(this.daysDiffFromToday, 'days').locale('pl');
+          let dateName = `Dnia ${diffDateObj.format('DD.MM')}`;
+          if (this.daysDiffFromToday < -2) return dateName += ' zjadłeś';
+          else if (this.daysDiffFromToday > 2) return dateName += ' zjesz';
       }
     },
     chartData() {
@@ -203,19 +203,22 @@ span {
   margin-right: 40px;
   position: relative;
   @include small {
-    margin-right: 10px;
+    display: none;
   }
   .kcals-left {
+    background-color: #f0932b;
+    color: #ffffff;
+    padding: 0 5px;
+    border-radius: 4px;
     font-style: normal;
     font-size: 11px;
     position: absolute;
     right: 0;
-    top: -14px;
+    top: -15px;
+    transition: background-color .3s ease;
+    &.green { background-color: #68b931 !important; }
+    &.rose { background-color: #be2edd !important; }
   }
-}
-
-.red {
-  color: #B53471;
 }
 
 button {

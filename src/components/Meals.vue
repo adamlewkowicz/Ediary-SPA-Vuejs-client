@@ -8,7 +8,7 @@
     />
 
     <section class="box">
-      <table class="meals-table">
+      <table class="meal-table">
         <thead>
           <tr>
             <th>Produkt</th>
@@ -109,57 +109,120 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-article {
+<style lang="scss">
+.meal-wrapper {
   margin-top: 25px;
 }
 
 .box {
-  overflow-x: auto;
   margin-bottom: 35px;
-  @include phone {
-    padding: 5px;
-    th, tfoot > tr > td  {
-      &:not(:first-child):not(:nth-child(2)):not(:last-child) {
-        padding: 12px 2px;
+  @include small {
+    padding: 15px !important;
+  }
+}
+
+.meal-table {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    padding: 0 12px 16px 12px;
+    &:first-child { padding-left: 0; }
+    &:nth-child(2) { padding-right: 0 12px 12px 0; }
+  }
+  th, td {
+    text-align: center;
+    &:first-child { text-align: left; }
+  }
+}
+
+$theadColNames: 'Produkt:', 'Ilość (g)', 'Węgle', 'Białko', 'Tłuszcz', 'Kalorie', 'Usuń';
+$tfootColNames: '', 'Węgle', 'Białko', 'Tłuszcz', 'Kalorie';
+
+@include phone {
+  .meal-table {
+    thead { display: none; }
+    td {
+      display: block;
+      text-align: left;
+      position: relative;
+      padding: 5px 0 5px 30%;
+      &:before {
+        position: absolute;
+        font-weight: 500;
+        width: 30%;
+        top: 5px;
+        left: 0px;
+      }
+    }
+    tbody {
+      tr {
+        border-bottom: 2px solid $purple;
+        &:last-child td:last-child { padding-bottom: 40px; }
+        &:not(:first-child) td:first-child {
+          padding-top: 20px;
+          &:before { top: 20px; }
+        }
+      }
+      td {
+        &:nth-child(2):before { top: 14px; }
+        &:last-child:before { top: 12px; }
+        &:nth-child(2), &:last-child { padding: 0 0 0 30% }
+        @for $index from 1 through 7 {
+          &:nth-child(#{$index}):before { content: nth($theadColNames, $index); }
+        }
+      }
+    }
+    tfoot tr {
+      box-shadow: $baseShadow;
+      border-radius: 12px;
+    }
+    tfoot td {
+      margin: 0 20px;
+      &:not(:first-child):not(:last-child) {
+        display: inline-block;
+      }
+      &:first-child {
+        margin-top: 20px;
+        padding: 45px 0;
+        position: relative;
+        &:before {
+          font-weight: bold;
+          width: 100%;
+          position: absolute;
+          content: "Znajdź produkt";
+        }
+        &:after {
+          left: 50%;
+          transform: translateX(-50%);
+          position: absolute;
+          bottom: 14px;
+          font-weight: bold;
+          content: "Makro posiłku";
+        }
+      }
+      &:last-child {
+        margin-bottom: 20px;
+        padding: 0;
+        position: relative;
+        padding-top: 45px;
+        &:before {
+          top: 15px;
+          width: auto;
+          left: 50%;
+          transform: translateX(-50%);
+          content: "Usuń Posilek";
+          font-weight: bold;
+        }
+      }
+      @for $index from 2 through 5 {
+        &:nth-child(#{$index}):before { content: nth($tfootColNames, $index); }
       }
     }
   }
 }
 
-.meals-table {
-  @include small {
-    font-size: 10px;
-  }
-  border-collapse: collapse;
-  width: 100%;
-  td, th {
-    padding: 12px;
-    &:first-child {
-      text-align: left;
-    }
-  }
-  th {
-    &:nth-child(2) {
-      padding: 12px 18px 12px 5px;
-    }
-  }
-  tbody {
-    tr {
-      input[type=number] {
-        &:nth-child(odd) {
-          background-color: red;
-        }
-      }
-    }
-  }
-  tfoot, tbody {
-    td {
-      &:not(:first-child) {
-        text-align: center;
-      }
-    }
-  }
-}
+
+
+
 </style>
 

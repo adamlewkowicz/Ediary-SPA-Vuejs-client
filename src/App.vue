@@ -44,9 +44,12 @@ label {
   width: 100%;
   min-height: 42px;
   min-width: 42px;
+  user-select: none;
+  outline: none;
   &:hover {
     background-size: 20px;
     animation: rotate .5s ease;
+    animation-delay: .2s;
   }
 }
 

@@ -98,6 +98,7 @@ export default {
   font-family: $ff;
   font-size: 14px;
   outline: 0;
+  box-sizing: border-box;
   &::placeholder {
     color: #a1a1a1;
     font-weight: 300;
@@ -110,6 +111,10 @@ export default {
   height: 300px;
   min-width: 400px;
   overflow-y: auto;
+  @include phone {
+    min-width: 260px;
+    width: 100%;
+  }
 }
 
 ul {
