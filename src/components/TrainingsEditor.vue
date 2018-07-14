@@ -2,23 +2,24 @@
   <div>
     <h2>{{ exercise.name }}</h2>
     <div class="box">
-      Czas przerwy dla każdego z powtórzeń:
+      Czas przerwy dla każdego z powtórzeń: {{ exercise.break }} s.
       <div class="sets-duration-setter">
         <input
           type="range"
-          v-model="setsBreakInSeconds"
+          :value="exercise.break || 0"
+          @input="updateExercise({ break: Number($event.target.value) }, 1000)"
           min="0"
-          max="300"
+          max="900"
         />
         <input
           type="text"
-          :value="setsBreakTime.minutes"
+          :value="convertedSetsBreakTime.minutes"
           @input="updateBreakTime($event, 'min')"
         />
         min.
         <input
           type="text"
-          :value="setsBreakTime.seconds"
+          :value="convertedSetsBreakTime.seconds"
           @input="updateBreakTime($event)"
         />
         sek.
@@ -75,7 +76,7 @@ export default {
   },
   data() {
     return {
-      setsBreakInSeconds: 60
+      allSetsBreakTime: 0
     }
   },
   computed: {
@@ -85,26 +86,29 @@ export default {
         exerciseId: this.exerciseId
       }
     },
-    setsBreakTime() {
-      const setsBreakInMinutes = parseInt(this.setsBreakInSeconds / 60);
+    convertedSetsBreakTime() {
+      if (!this.exercise.break) return { minutes: 0, seconds: 0 };
+      const setsBreakInMinutes = parseInt(this.exercise.break / 60);
       return {
         minutes: setsBreakInMinutes,
-        seconds: this.setsBreakInSeconds - setsBreakInMinutes * 60
+        seconds: this.exercise.break - setsBreakInMinutes * 60
       }
-    },
-    additionalSetProps () {
-      return this.$store.state.training.additionalSetProps;
     }
   },
   methods: {
     ...mapActions(['deleteExercise']),
     updateBreakTime(event, timeUnit) {
-      if (event.target.value > 900) {
-        this.setsBreakInSeconds = 900;
-      } else if (timeUnit == 'min') {
-        this.setsBreakInSeconds = event.target.value * 60 + this.setsBreakTime.seconds;
+      let value = Number(event.target.value);
+      if (timeUnit == 'min') {
+        if (value > 15) this.updateExercise({ break: 900 });
+        if (value < 0) this.updateExercise({ break: 0 });
+        else this.updateExercise({ break: value * 60 + this.convertedSetsBreakTime.seconds });
       } else {
-        this.setsBreakInSeconds = 31;
+        if (value > 59) value = 59;
+        if (value < 0) value = 0;
+        this.updateExercise({
+          break: this.convertedSetsBreakTime.minutes * 60 + value
+        });
       }
     },
     addExerciseSet() {
@@ -114,11 +118,25 @@ export default {
           loadweight: 0,
           repeats: 0,
           break: 10,
-          time: 0,
-          ...this.additionalSetProps
+          time: 0
         }
       });
+    },
+    updateExerciseBreak(event) {
+      this.updateExercise({
+        break: Number(event.target.value)
+      });
+    },
+    updateExercise(exercise, delay) {
+      this.$store.dispatch('updateExercise', {
+        ...this.meta,
+        delay,
+        exercise
+      });
     }
+  },
+  mounted() {
+    this.allSetsBreakTime = this.exercise.break;
   }
 }
 </script>

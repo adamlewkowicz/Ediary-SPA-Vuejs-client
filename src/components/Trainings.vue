@@ -125,6 +125,10 @@ export default {
   }
 }
 
+.box {
+  overflow-x: auto;
+}
+
 .start-exercise-btn {
   @extend %clearBtn;
   background-color: #6c5ce7;

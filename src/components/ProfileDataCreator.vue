@@ -36,10 +36,10 @@ export default {
   data() {
     return {
       newUserData: {
-        age: 31,
-        weight: 47,
-        height: 120,
-        man: true,
+        age: 0,
+        weight: 0,
+        height: 0,
+        man: null,
         weightGoal: 'maintain'
       },
       errors: []

@@ -15,7 +15,7 @@
         <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
         <transition name="fade">
           <!-- SLIDE IN FROM THE BOTTOM -->
-          <i v-if="todaysMealsMacro.kcals > 0"
+          <i v-show="kcalsAreHigherThanZero"
             class="kcals-left"
             :class="[kcalsAreOver ? 'rose' : '', kcalsAreFine ? 'green' : '']">
             {{ neededKcalsLeft }}
@@ -62,6 +62,9 @@ export default {
       'daysDiffFromToday',
       'todaysMealsMacroGoalNeeds'
     ]),
+    kcalsAreHigherThanZero() {
+      return this.todaysMealsMacro.kcals > 0 ? true : false;
+    },
     kcalsAreOver() {
       return this.todaysMealsMacroGoalNeeds.kcals > 200 ? true :  false;
     },
