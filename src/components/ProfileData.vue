@@ -46,7 +46,7 @@
         <button type="submit">Dodaj pomiar</button>
       </form>
 
-      <div>
+      <div v-if="weights.length">
         <table class="meas-tab">
           <thead>
             <tr>

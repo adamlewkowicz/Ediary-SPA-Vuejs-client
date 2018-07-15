@@ -12,3 +12,14 @@
 .slide-left-enter-active {
   transition: all 1s ease;
 }
+
+
+.slide-bottom-enter-active, .slide-bottom-leave-active {
+  transition: all .3s ease;
+  // opacity: 1;
+}
+
+.slide-bottom-enter, .slide-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}

@@ -4,20 +4,20 @@
     <br>
 
     <p><label for="age">Wiek</label></p>
-    <input type="text" id="age" v-model="newUserData.age"/>
+    <input type="text" id="age" v-model="userData.age"/>
 
     <p><label for="weight">Waga</label></p>
-    <input type="text" id="weight" v-model="newUserData.weight"/>
+    <input type="text" id="weight" v-model="userData.weight"/>
 
     <p><label for="height">Wzrost</label></p>
-    <input type="text" id="height" v-model="newUserData.height"/>
+    <input type="text" id="height" v-model="userData.height"/>
 
     <br><br>
 
-    <input type="radio" id="man" value="true" v-model="newUserData.man"/>
+    <input type="radio" id="man" value="true" v-model="userData.man"/>
     <label for="man">Mężczyzna</label>
 
-    <input type="radio" id="woman" value="false" v-model="newUserData.man"/>
+    <input type="radio" id="woman" value="false" v-model="userData.man"/>
     <label for="woman">Kobieta</label>
 
     <br><br>
@@ -35,10 +35,10 @@
 export default {
   data() {
     return {
-      newUserData: {
-        age: 0,
-        weight: 0,
-        height: 0,
+      userData: {
+        age: 23,
+        weight: 75,
+        height: 181,
         man: null,
         weightGoal: 'maintain'
       },
@@ -47,17 +47,17 @@ export default {
   },
   methods: {
     addUserData() {
-      const uData = this.newUserData;
+      const { age, weight, height, man } = this.userData;
       this.errors = [];
       const pushError = msg => this.errors.push(msg);
 
-      if (uData.age < 6 || uData.age > 120) pushError('Nieprawidłowy wiek');
-      if (uData.weight < 30 || uData.weight > 200) pushError('Nieprawidłowa waga');
-      if (uData.height < 120 || uData.height > 250) pushError('Nieprawidłowy wzrost');
-      if (uData.man == null) pushError('Wybierz płeć');
+      if (age < 6 || age > 120) pushError('Nieprawidłowy wiek');
+      if (weight < 30 || weight > 200) pushError('Nieprawidłowa waga');
+      if (height < 120 || height > 250) pushError('Nieprawidłowy wzrost');
+      if (man == null) pushError('Wybierz płeć');
 
       if (!this.errors.length) {
-        this.$store.dispatch('addGeneralMeas', this.newUserData);
+        this.$store.dispatch('addGeneralMeas', this.userData);
       }
     }
   }

@@ -1,6 +1,5 @@
 import Vue from 'Vue';
 import axios from 'axios';
-import { stat } from 'fs';
 
 const roundNum = val => Math.round(val * 100) / 100;
 
@@ -8,7 +7,9 @@ const measurements = {
   state: {
     weight: 0,
     bodyFat: 13.3 / 100,
-    weightGoal: 'maintain'
+    weightGoal: 'maintain',
+    all: [],
+    fetchingData: true
   },
   mutations: {
     GET_MEAS (state, payload) {
@@ -16,10 +17,13 @@ const measurements = {
       for (let prop in meas) {
         state[prop] = meas[prop];
       }
-      state.weight = meas.all ? parseFloat(meas.all.find(meas => meas.name == 'waga').value) : 0;
+      state.weight = meas.all && meas.all.length ? parseFloat(meas.all.find(meas => meas.name == 'waga').value) : 0;
+      state.fetchingData = false;
     },
     ADD_GENERAL_MEAS (state, payload) {
-
+      for (let prop in payload) {
+        state[prop] = payload[prop];
+      }
     },
     UPDATE_GENERAL_MEAS (state, payload) {
       for (let prop in payload) {
@@ -41,10 +45,8 @@ const measurements = {
       commit('GET_MEAS', await axios.get('/meas'));
     },
     async addGeneralMeas ({ commit }, payload) {
-      // commit('ADD_GENERAL_MEAS', payload);
-      console.log(payload)
+      commit('UPDATE_MEAS', payload);
       const res = await axios.post(`/meas/general`, payload);
-      console.log(res.data)
     },
     async updateGeneralMeas ({ commit }, payload) {
       commit('UPDATE_GENERAL_MEAS', payload);
@@ -81,7 +83,7 @@ const measurements = {
     userHasMeasurements: state => state.weight > 0 ? true : false
     // LBM: state => roundNum((1 - state.bodyFat) * state.weight),
     // BMR: (state, getters) => roundNum(370 + (21.6 * getters.LBM)),
-    // TDEE: (state, getters) => roundNum(getters.BMR * 1.2),
+    // TDEE: (state, getters) => roundNum(getters.BMR * 1.2)
   }
 }
 

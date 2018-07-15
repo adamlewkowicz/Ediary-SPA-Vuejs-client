@@ -13,8 +13,7 @@
       <div class="macro-snippet" v-if="userHasMeasurements">
         <span>{{ dateName }}</span>
         <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
-        <transition name="fade">
-          <!-- SLIDE IN FROM THE BOTTOM -->
+        <transition name="slide-bottom">
           <i v-show="kcalsAreHigherThanZero"
             class="kcals-left"
             :class="[kcalsAreOver ? 'rose' : '', kcalsAreFine ? 'green' : '']">
@@ -24,7 +23,9 @@
       </div>
     </transition>
 
-    <button @click="redirect('profile')">
+    <button
+      @click="redirect('profile')"
+      :class="{ 'notification-warning': (!fetchingData && !userHasMeasurements) }">
       <span>Profil</span>
       <img src="./../assets/img/icons/person.png"/>
     </button>
@@ -99,6 +100,9 @@ export default {
           else if (this.daysDiffFromToday > 2) return dateName += ' zjesz';
       }
     },
+    fetchingData() {
+      return this.$store.state.measurements.fetchingData;
+    },
     chartData() {
       const { carbs, prots, fats } = this.todaysMealsMacro;
       return {
@@ -160,11 +164,6 @@ export default {
       }
     }
   },
-  // computed: mapGetters([
-  //   'todaysMealsMacro',
-  //   'goalMacroNeeds',
-  //   'todaysMealsMacroGoalNeeds'
-  // ])
 }
 </script>
 
@@ -188,6 +187,18 @@ export default {
       display: none;
     }
   }
+}
+
+button { outline: none; }
+
+button img {
+  margin: 0 auto;
+}
+
+.notification-warning:before {
+  top: 0;
+  left: -10px;
+  @include phone { left: -4px; }
 }
 
 .bar-chart {

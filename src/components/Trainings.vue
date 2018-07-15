@@ -120,7 +120,6 @@ export default {
 <style lang="scss" scoped>
 .set {
   &:hover {
-    // background-color: #ecf0f1;
     border-radius: 12px;
   }
 }
@@ -154,7 +153,6 @@ table {
 }
 
 section {
-  // background-color: #fff;
   padding: 40px;
   box-sizing: border-box;
   box-shadow: 0px 0px 30px -10px #d8d8d8;

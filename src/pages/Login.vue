@@ -4,29 +4,47 @@
       <header>
         <h1>Logowanie</h1>
       </header>
-      <form @submit.prevent="login">
-        <label for="email">Email:</label>
-        <input type="text" id="email" class="text" v-model="credentials.email">
-        <label for="password">Hasło:</label>
-        <input type="password" id="password" class="text" v-model="credentials.password">
-        <p v-for="(error, errorKey) in errors" :key="errorKey">
-          {{ error }}
-        </p>
-        <button type="submit" class="btn-submit">Zaloguj się</button>
-      </form>
+      <vue-form :formData="formData"/>
     </article>
   </section>
 </template>
 
 <script>
+import VueForm from '@/components/VueForm';
+import Joi from 'joi';
+
 export default {
+  components: { VueForm },
   data() {
     return {
       credentials: {
         email: 'testaccount',
         password: 'envEirra'
       },
-      errors: []
+      formData: {
+        elements: [
+          {
+            label: { id: 'login-email', name: 'Email' },
+            validation: {
+              joi: Joi.string().email().min(4).max(30).required(),
+              errMsg: "Adres email jest nieprawidłowy"
+            }
+          },
+          {
+            type: 'password',
+            label: { id: 'login-password', name: 'Hasło' },
+            validation: {
+              joi: Joi.string().min(4).max(30).required(),
+              errMsg: "Hasło jest nieprawidłowe"
+            }
+          },
+          {
+            type: 'submit',
+            value: 'Zaloguj się',
+            class: 'login-submit'
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -54,29 +72,28 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 section {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .box {
-  transition: height .2s ease;
   width: 400px;
   padding: 50px;
   min-width: 280px;
 }
+
 h1 {
-  margin-bottom: 40px;
+  margin: 0 0 40px 0;
   font-size: 25px;
 }
-label {
-  margin-top: 20px;
-  padding-left: 5px;
-}
-.btn-submit {
-  margin: 10px 0;
+
+.login-submit {
+  @extend .btn-submit;
+  margin-top: 40px;
 }
 
 input {

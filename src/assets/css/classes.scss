@@ -24,6 +24,7 @@ $purple: #a57bec;
   padding: 16px;
   box-sizing: border-box;
   color: #fff;
+  outline: none;
 }
 
 .add-btn {
@@ -48,5 +49,25 @@ $purple: #a57bec;
     border-radius: 30px;
     width: 49px;
     box-sizing: border-box;
+  }
+}
+
+.notification {
+  position: relative;
+  &:before {
+    position: absolute;
+    font-size: 12px;
+    box-shadow: 0 1px 0 rgba(0,0,0,.15),inset 0 1px 0 hsla(0,0%,100%,.15);
+    border-radius: 3px;
+    width: 14px;
+  }
+}
+
+.notification-warning {
+  @extend .notification;
+  &:before {
+    content: "!";
+    background-color: #eb4d4b;
+    color: white;
   }
 }
