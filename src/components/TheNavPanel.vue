@@ -11,6 +11,18 @@
           <router-link to="/diary">
             Dziennik
           </router-link>
+          <ul v-if="$route.path.startsWith('/diary')" class="nested-list">
+            <li>
+              <router-link to="/diary">
+                Posiłki
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/diary/stats">
+                Statystyki
+              </router-link>
+            </li>
+          </ul>
         </li>
         <li>
           <router-link to="/training">
@@ -21,10 +33,6 @@
     </nav>
   </div>
 </template>
-
-<script>
-
-</script>
 
 <style lang="scss" scoped>
 
@@ -81,5 +89,11 @@ nav {
   }
 }
 
+
+.nested-list {
+  background-color: rgba(0,0,0,.1);
+  list-style-type: circle !important;
+  a { padding-left: 35px; }
+}
 
 </style>

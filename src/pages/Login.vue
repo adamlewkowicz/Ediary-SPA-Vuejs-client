@@ -4,6 +4,7 @@
       <header>
         <h1>Logowanie</h1>
       </header>
+      <button @click="login">CLICK</button>
       <vue-form :formData="formData"/>
     </article>
   </section>
@@ -24,6 +25,7 @@ export default {
       formData: {
         elements: [
           {
+            name: 'login',
             label: { id: 'login-email', name: 'Email' },
             validation: {
               joi: Joi.string().email().min(4).max(30).required(),
@@ -32,6 +34,7 @@ export default {
           },
           {
             type: 'password',
+            name: 'password',
             label: { id: 'login-password', name: 'Hasło' },
             validation: {
               joi: Joi.string().min(4).max(30).required(),
@@ -49,13 +52,14 @@ export default {
   },
   methods: {
     login() {
-      this.errors = [];
-      const loginVals = Object.values(this.credentials);
-      if (loginVals.some(val => val.length < 4)) {
-        this.errors.push('Długość emaila i hasła musi być dłuższa niż 4');
-      } else {
-        this.$store.dispatch('login', this.credentials);
-      }
+      // this.errors = [];
+      this.$store.dispatch('login', this.credentials);
+      // const loginVals = Object.values(this.credentials);
+      // if (loginVals.some(val => val.length < 4)) {
+      //   this.errors.push('Długość emaila i hasła musi być dłuższa niż 4');
+      // } else {
+      //   this.$store.dispatch('login', this.credentials);
+      // }
     }
   },
   computed: {
@@ -87,13 +91,13 @@ section {
 }
 
 h1 {
-  margin: 0 0 40px 0;
+  margin: 0 0 35px 0;
   font-size: 25px;
 }
 
 .login-submit {
   @extend .btn-submit;
-  margin-top: 40px;
+  margin-top: 35px;
 }
 
 input {

@@ -12,7 +12,8 @@ axios.defaults.baseURL = process.env.NODE_ENV == 'development' ? 'http://localho
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth-token') || '';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
+Vue.config.performance = true
 
 /* eslint-disable no-new */
 new Vue({

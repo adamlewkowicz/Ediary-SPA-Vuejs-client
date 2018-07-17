@@ -1,7 +1,7 @@
 <template>
-  <tr>
+  <tr class="slideIn">
     <td>
-      {{ product.name | cutNameLength }}
+      {{ product.name }}
       <!-- <button
         @click="triggerDetails(true)"
         class="show-details-btn"
@@ -80,6 +80,12 @@ export default {
   color: #056bb5;
   background-color: #fff;
 }
+
+// @keyframes slidzik {
+//   from {
+//     top: 200px;
+//   }
+// }
 /*
 .show-details-btn {
   @extend %clearBtn;

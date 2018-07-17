@@ -1,20 +1,22 @@
 <template>
   <div>
     <input type="text" v-model="productName" @input="delayInput" class="searcher" placeholder="Nazwa produktu..."/>
-    <div class="products-result" v-if="products.length">
-      <ul>
-        <li v-for="(product, productKey) in products" :key="productKey" @click="addProduct(product)">
-          <p>{{ product.name }}</p>
-          <div class="product-details">
-            {{ product.source }}
-            <b>{{ product.carbs }}</b> /
-            <b>{{ product.prots }}</b> /
-            <b>{{ product.fats }}</b> -
-            <b>{{ product.kcals }} </b> kcal
-          </div>
-        </li>
-      </ul>
-    </div>
+
+      <div class="products-result" v-if="products.length">
+        <transition-group appear tag="ul" name="slide-left">
+          <li v-for="(product, productKey) in productsWithPhrases" :key="productKey" @click="addProduct(product)">
+            <p v-html="product.thickPhrase"></p>
+            <div class="product-details">
+              {{ product.source }}
+              <b>{{ product.carbs }}</b> /
+              <b>{{ product.prots }}</b> /
+              <b>{{ product.fats }}</b> -
+              <b>{{ product.kcals }} </b> kcal
+            </div>
+          </li>
+        </transition-group>
+      </div>
+
   </div>
 </template>
 
@@ -82,13 +84,39 @@ export default {
         this.addMealProduct(payload);
       }
     }
+  },
+  computed: {
+    productsWithPhrases() {
+
+      const thickerPhrase = (productName) => {
+        const phrase = this.productName;
+        const loweredProductName = productName.toLowerCase();
+        const firstCharIndex = loweredProductName.indexOf(phrase);
+        if (firstCharIndex < 0) return productName;
+
+        const cut = (start, end) => productName.substring(start, end);
+
+        const phraseEndPos = firstCharIndex + phrase.length;
+
+        let nameWithPhrase =
+          cut(0, firstCharIndex) +
+          '<b>' + cut(firstCharIndex, phraseEndPos) + '</b>' +
+          cut(phraseEndPos, productName.length);
+
+        return nameWithPhrase;
+      }
+
+      return this.products.map(product => ({
+        ...product,
+        thickPhrase: thickerPhrase(product.name)
+      }));
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .searcher {
-  // border-bottom: 1px solid #8c8c8c;
   width: 100%;
   height: 35px;
   background: url("./../assets/img/icons/glass-finder.svg") no-repeat;
@@ -109,7 +137,9 @@ export default {
   position: absolute;
   z-index: 1;
   height: 300px;
-  min-width: 400px;
+  // min-width: 400px;
+  max-width: 400px;
+  width: 400px;
   overflow-y: auto;
   @include phone {
     min-width: 260px;

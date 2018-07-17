@@ -32,7 +32,6 @@ const diary = {
       state.meals.push(payload);
     },
     UPDATE_MEAL (state, payload) {
-      // state.meals[payload.mealKey] = {...state.meals[payload.mealKey], ...payload.meal }
       for (const prop in payload.meal) {
         state.meals[payload.mealKey][prop] = payload.meal[prop];
       }

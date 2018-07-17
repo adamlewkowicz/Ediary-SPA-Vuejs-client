@@ -8,7 +8,11 @@
       :type="el.type"
       :validation="el.validation"
       :isValid="el.isValid"
+      :wasTouched="el.wasTouched"
+      :value="el.value"
+      @changedValue="updateValue"
       @validationChange="updateValidStatus"
+      @touchedElement="updateTouchStatus"
     />
     <button :class="submitInput.class">
       {{ submitInput.value }}
@@ -32,70 +36,60 @@ export default {
   },
   data() {
     return {
-      defaultOptions: {
-        element: {
-          type: 'text'
-        }
-      },
-      disableSubmit: false
+      disableSubmit: false,
+      formDataClone: {...this.formData},
+      textInputs: [],
+      submitInput: {}
     }
   },
   methods: {
+    boro() {
+      this.textInputs[0].wasTouched = true;
+    },
     submitForm() {
-      // this.textInputs[0].isValid = true;
-      // for (let input of this.textInputs) {
-      //   input.isValid = true;
-      // }
-      // this.textInputs.forEach((el, index) => {
-      //   this.textInputs[index].isValid = true;
-      // });
-      if (this.formDataClone.elements.some(el => el.isValid == false)) {
-        // this.formDataClone.elements.forEach(el => el.wasTouched = true);
+      if (this.valuesAreValid == false) {
+        this.textInputs.forEach(el => el.wasTouched = true);
       } else {
-
+        const formObject = this.textInputs.reduce((formObj, currentInput) => {
+          formObj[currentInput.name] = currentInput.value;
+          return formObj;
+        }, {});
+        this.$emit('formSubmit', formObject);
       }
+    },
+    updateValue(value, elKey) {
+      this.textInputs[elKey].value = value;
     },
     updateValidStatus(status, elKey) {
       this.textInputs[elKey].isValid = status;
+    },
+    updateTouchStatus(elKey) {
+      this.textInputs[elKey].wasTouched = true;
     }
   },
   computed: {
-    formDataClone() {
-      return {
-        ...this.formData,
-        elements: this.formData.elements.map(el => ({
-          ...el,
-          type: el.type == null ? 'text' : el.type
-        }))
-      }
-    },
-    textInputs() {
-      return this.formDataClone.elements
-        .filter(el => el.type === 'text' || el.type === 'password' || el.type === 'number')
-        .map(el => ({
-          ...el,
-          isValid: false,
-          wasTouched: false
-        }));
-    },
-    submitInput() {
-      return this.formDataClone.elements.find(el => el.type === 'submit');
-    },
     valuesAreValid() {
       return this.textInputs.some(el => el.isValid === false) ? false : true;
     }
   },
-  created() {
-    this.formData = {...this.formData, mareq: 999 }
-    // this.formDataClone = {
-    //   ...this.formData,
-    //   elements: this.formData.elements.map(el => ({
-    //     ...el,
-    //     type: el.type == null ? 'text' : el.type,
-    //     isValid: false,
-    //     wasTouched: false
-    //   }))
-    // }
+  mounted() {
+    this.textInputs = this.formDataClone.elements
+      .filter(el => el.type !== 'submit' || el.type == null)
+
+
+    this.textInputs.forEach((el, index) => {
+        this.$set(this.textInputs[index], 'isValid', false);
+        this.$set(this.textInputs[index], 'wasTouched', false);
+        this.$set(this.textInputs[index], 'value', '');
+    });
+    this.submitInput = this.formDataClone.elements.find(el => el.type === 'submit');
+    // this.formDataClone.elements.forEach((el, index) => {
+    //   if (el.type != 'submit') {
+    //     this.$set(this.formDataClone.elements[index], 'isValid', false);
+    //     this.$set(this.formDataClone.elements[index], 'wasTouched', false);
+    //     if (el.type == null) this.$set(this.formDataClone.elements[index], 'type', 'text');
+    //   }
+    // });
   }
 }
 </script>

@@ -6,9 +6,12 @@ import Login from '@/pages/Login';
 
 import Dashboard from '@/layouts/Dashboard';
 import Homepage from '@/pages/Homepage';
-import Diary from '@/pages/Diary';
 import Training from '@/pages/Training';
 import Profile from '@/pages/Profile';
+
+import Diary from '@/pages/Diary';
+import Home from '@/pages/Diary/Home';
+import Stats from '@/pages/Diary/Stats';
 
 Vue.use(Router)
 
@@ -16,7 +19,6 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      name: 'Login',
       component: Login,
       beforeEnter: (to, from, next) => {
         store.state.user.isLoggedIn ? next('/') : next();
@@ -24,7 +26,6 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'Dashboard',
       component: Dashboard,
       beforeEnter: (to, from, next) => {
         store.state.user.isLoggedIn ? next() : next('/login');
@@ -38,7 +39,19 @@ export default new Router({
         {
           path: '/diary',
           component: Diary,
-          meta: { title: 'Dziennik żywieniowy' }
+          meta: { title: 'Dziennik żywieniowy' },
+          children: [
+            {
+              path: '',
+              component: Home,
+              meta: { title: 'Posiłki' }
+            },
+            {
+              path: 'stats',
+              component: Stats,
+              meta: { title: 'Statystyki' }
+            }
+          ]
         },
         {
           path: '/training',

@@ -20,17 +20,18 @@
             <th>Usuń</th>
           </tr>
         </thead>
-        <tbody>
+        <transition-group name="list-complete" tag="tbody">
           <meals-products
+            class="list-complete-item"
             v-for="(product, productKey) in meal.products"
-            :key="productKey"
+            :key="product.id"
             :product="product"
             :mealKey="mealKey"
             :mealId="mealId"
             :productKey="productKey"
             :productId="product.id"
           />
-        </tbody>
+        </transition-group>
         <tfoot>
           <tr>
             <td colspan="2">
@@ -116,6 +117,7 @@ export default {
 
 .box {
   margin-bottom: 35px;
+  transition: all 1s ease;
   @include small {
     padding: 15px !important;
   }
@@ -124,9 +126,13 @@ export default {
 .meal-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   th {
     padding: 0 12px 16px 12px;
-    &:first-child { padding-left: 0; }
+    &:first-child {
+      padding-left: 0;
+      width: 40%;
+    }
     &:nth-child(2) { padding-right: 0 12px 12px 0; }
   }
   th, td {
@@ -220,9 +226,5 @@ $tfootColNames: '', 'Węgle', 'Białko', 'Tłuszcz', 'Kalorie';
     }
   }
 }
-
-
-
-
 </style>
 

@@ -3,7 +3,7 @@
     <div class="text-labels">
       <label :for="label.id">{{ label.name }}</label>
       <transition name="slide-bottom">
-        <div class="error-message" v-show="!valueIsCorrect && elementWasTouched">
+        <div class="error-message" v-show="!valueIsCorrect && wasTouched">
           {{ renderErrMsg }}
         </div>
       </transition>
@@ -14,13 +14,12 @@
       :class="[
         className,
         { 'input-error': !valueIsCorrect && wasTouched },
-        { 'input-valid': elementWasTouched && !valueIsCorrect }
+        { 'input-valid': wasTouched && !valueIsCorrect }
       ]"
       :placeholder="placeholder"
       :value="value"
       @input="updateValue"
     />
-    {{ wasTouched }} => {{ isValid }}
   </div>
 </template>
 
@@ -30,6 +29,8 @@ import Joi from 'joi';
 export default {
   name: 'FormElement',
   props: {
+    el: Object,
+    value: String,
     elKey: Number,
     wasTouched: Boolean,
     isValid: Boolean,
@@ -59,17 +60,18 @@ export default {
   },
   data() {
     return {
-      value: '',
       errorMessage: '',
-      elementWasTouched: false,
       aha: null,
       valueIsCorrect: false
     }
   },
   methods: {
     updateValue (event) {
-      this.value = event.target.value;
-      this.elementWasTouched = true;
+      this.$emit('changedValue', event.target.value, this.elKey);
+      // this.value = event.target.value;
+      if (!this.wasTouched) {
+        this.$emit('touchedElement', this.elKey);
+      }
       this.validateValue();
     },
     validateValue() {
