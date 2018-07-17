@@ -19,7 +19,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment';
 import BarDatePicker from '@/components/BarDatePicker';
 
 export default {
@@ -33,10 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getMeals']),
-    getCurrentTime() {
-      return moment().format('HH:mm:ss');
-    }
+    ...mapActions(['getMeals'])
   },
   computed: {
     ...mapGetters(['weeklyMeals', 'weeklyMealsMacro']),

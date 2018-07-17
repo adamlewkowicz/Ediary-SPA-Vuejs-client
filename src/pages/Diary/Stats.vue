@@ -1,22 +1,30 @@
 <template>
-  <div class="box">
-    <div class="doughnut-chart-wrapper">
-      <doughnut-chart
-        :chartData="chartData"
-      />
+  <div>
+    <div class="box">
+      <div class="doughnut-chart-wrapper">
+        <doughnut-chart
+          :options="{ responsive: true }"
+          :chartData="chartData"
+        />
+      </div>
+      <div class="todays-macro-info">
+        <h3>Makroskładniki</h3>
+        <p v-for="(macroElVal, macroElName) in goalMacroNeeds" :key="macroElName">
+          <span :class="macroElName">
+            {{ polishMacroElNames[macroElName] }}
+          </span>
+          {{ todaysMealsMacro[macroElName] }} / <b>{{ goalMacroNeeds[macroElName] }}</b>
+          {{ todaysMealsMacroGoalNeeds[macroElName] }}
+        </p>
+      </div>
     </div>
-    <div class="todays-macro-info">
-      <h3>Makroskładniki</h3>
-      <p v-for="(macroElVal, macroElName) in goalMacroNeeds" :key="macroElName">
-        <span :class="macroElName">
-          {{ polishMacroElNames[macroElName] }}
-        </span>
-        {{ todaysMealsMacro[macroElName] }} / <b>{{ goalMacroNeeds[macroElName] }}</b>
-        {{ todaysMealsMacroGoalNeeds[macroElName] }}
-      </p>
-    </div>
-    <div>
-
+    <div class="box weekly-macro">
+      <div class="line-cart-wrapper">
+        <line-chart
+          :options="{ responsive: true, maintainAspectRatio: false }"
+          :chartData="lineChartData"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +32,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import DoughnutChart from '@/components/DoughnutChart';
+import LineChart from '@/components/LineChart';
 
 export default {
   props: {
@@ -33,7 +42,8 @@ export default {
     }
   },
   components: {
-    DoughnutChart
+    DoughnutChart,
+    LineChart
   },
   data() {
     return {
@@ -50,7 +60,8 @@ export default {
       'todaysMealsMacro',
       'userHasMeasurements',
       'goalMacroNeeds',
-      'todaysMealsMacroGoalNeeds'
+      'todaysMealsMacroGoalNeeds',
+      'weeklyMealsMacro'
     ]),
     chartData() {
       const { carbs, prots, fats } = this.todaysMealsMacro;
@@ -70,6 +81,21 @@ export default {
         ]
       }
     },
+    lineChartData() {
+      const values = Object.values(this.weeklyMealsMacro);
+      const dates = Object.keys(this.weeklyMealsMacro);
+      return {
+        labels: dates,
+        datasets: [{
+          borderColor: '#0abde3',
+          backgroundColor: 'transparent',
+
+          label: 'Kalorie',
+          data: values
+        }]
+      }
+      return values;
+    }
   },
   filters: {
     macroNeedsInfo(macroVal) {
@@ -82,14 +108,27 @@ export default {
 
 <style lang="scss" scoped>
 .box {
+  margin-bottom: 100px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  align-content: space-between;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  @include phone {
+    flex-direction: column;
+  }
+}
+
+.line-cart-wrapper {
+  width: 100%;
+  height: 400px;
 }
 
 .doughnut-chart-wrapper {
-  max-width: 350px;
+  width: 50%;
+  @include phone {
+    width: 100%;
+    margin-bottom: 25px;
+  }
 }
 
 $macroColors: #FF6384, #8eaf34, #FFCE56, #34495e;
@@ -112,6 +151,7 @@ p {
 span {
   padding: 5px;
   margin-right: 35px;
+  @include phone { margin-right: 10px; }
   color: #fff;
   width: 102px;
   border-radius: 6px;

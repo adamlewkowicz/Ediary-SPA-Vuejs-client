@@ -80,7 +80,7 @@ export default {
 
 .page-title-wrapper {
   height: 60px;
-  margin-top: 10px;
+  margin-top: 70px;
   margin-bottom: 50px;
   display: flex;
 }

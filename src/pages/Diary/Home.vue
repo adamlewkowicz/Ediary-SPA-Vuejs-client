@@ -20,6 +20,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Meals from '@/components/Meals';
+import moment from 'moment';
 
 export default {
   props: {
@@ -46,6 +47,9 @@ export default {
         kcals: 0,
         products: []
       });
+    },
+    getCurrentTime() {
+      return moment().format('HH:mm:ss');
     }
   }
 }

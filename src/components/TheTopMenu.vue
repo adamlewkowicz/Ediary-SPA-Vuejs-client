@@ -8,20 +8,17 @@
       :options="chartOpts"
       height="70"
     /> -->
-
-    <transition name="fade">
-      <div class="macro-snippet" v-if="userHasMeasurements">
-        <span>{{ dateName }}</span>
-        <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
-        <transition name="slide-bottom">
-          <i v-show="kcalsAreHigherThanZero"
-            class="kcals-left"
-            :class="[kcalsAreOver ? 'rose' : '', kcalsAreFine ? 'green' : '']">
-            {{ neededKcalsLeft }}
-          </i>
-        </transition>
-      </div>
-    </transition>
+    <div class="macro-snippet" v-if="userHasMeasurements">
+      <span>{{ dateName }}</span>
+      <b>{{ todaysMealsMacro.kcals }}</b> / {{ goalMacroNeeds.kcals }} kcal
+      <transition name="slide-bottom">
+        <i v-if="kcalsAreHigherThanZero"
+          class="kcals-left"
+          :class="[kcalsAreOver ? 'rose' : '', kcalsAreFine ? 'green' : '']">
+          {{ neededKcalsLeft }}
+        </i>
+      </transition>
+    </div>
 
     <button
       @click="redirect('profile')"
@@ -32,7 +29,7 @@
 
     <button @click="logout">
       <span>Wyloguj się</span>
-      <img src="./../assets/img/icons/settings.png"/>
+      <img src="./../assets/img/icons/logout.svg" width="24"/>
     </button>
 
   </div>
@@ -170,17 +167,18 @@ export default {
 
 <style lang="scss" scoped>
 #menu_wrapper {
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.8);
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 90;
   height: 70px;
-  margin-left: 200px;
+  border-bottom: 1px solid rgba(1,1,1,0.15);
   box-shadow: 0px 0px 110px 0px rgba(212,214,242,.8);
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 0 50px;
-  @include tablet {
-    margin: 0;
-  }
   @include phone {
     padding: 0 25px;
     span {

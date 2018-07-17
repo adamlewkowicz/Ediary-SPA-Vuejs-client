@@ -117,7 +117,6 @@ export default {
 
 .box {
   margin-bottom: 35px;
-  transition: all 1s ease;
   @include small {
     padding: 15px !important;
   }

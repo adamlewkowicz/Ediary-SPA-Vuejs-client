@@ -112,6 +112,14 @@ const diary = {
         kcals: sumMacro('kcals', meal.products),
       }));
     },
+    weeklyzMeals: (state, getters, rootState) => {
+      const pickedWeek = moment(rootState.date.pickedWeek, 'YYYY-MM-DD');
+      return getters.calcedMeals.filter(meal => {
+        const mealDate = moment(meal.date, 'YYYY-MM-DD');
+        const daysDiff = pickedWeek.diff(mealDate, 'days') * -1;
+        return daysDiff >= 0 && daysDiff <= 7;
+      });
+    },
     weeklyMeals: (state, getters) => {
       return getters.calcedMeals.reduce((prev, current) => {
         const date = moment(current.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
