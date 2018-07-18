@@ -5,9 +5,13 @@
       :overlapSet="weeklyMealsMacro"
     />
 
+    <button class="add-btn" @click="addMeal">Dodaj nowy posiłek</button>
+
     <p v-if="!todaysMeals.length">
       Brak posiłków w dniu: {{ pickedDate }}
     </p>
+
+
 
     <router-view v-else
       :todaysMeals="todaysMeals"
@@ -20,6 +24,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import BarDatePicker from '@/components/BarDatePicker';
+import moment from 'moment';
 
 export default {
   components: {
@@ -32,7 +37,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getMeals'])
+    ...mapActions(['getMeals']),
+    addMeal() {
+      this.$store.dispatch('addMeal', {
+        name: 'Posiłek',
+        date: `${this.pickedDate} ${this.getCurrentTime()}`,
+        carbs: 0,
+        prots: 0,
+        fats: 0,
+        kcals: 0,
+        products: []
+      });
+    },
+    getCurrentTime() {
+      return moment().format('HH:mm:ss');
+    }
   },
   computed: {
     ...mapGetters(['weeklyMeals', 'weeklyMealsMacro']),

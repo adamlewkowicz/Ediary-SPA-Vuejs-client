@@ -1,10 +1,6 @@
 <template>
   <div>
 
-    <div class="meal-helpers">
-      <button class="add-btn" @click="addMeal">Dodaj nowy posiłek</button>
-    </div>
-
      <meals
       v-for="(meal, mealKey) in todaysMeals"
       :key="mealKey"
@@ -20,7 +16,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Meals from '@/components/Meals';
-import moment from 'moment';
 
 export default {
   props: {
@@ -35,22 +30,6 @@ export default {
   },
   components: {
     Meals
-  },
-  methods: {
-    addMeal() {
-      this.$store.dispatch('addMeal', {
-        name: 'Posiłek',
-        date: `${this.pickedDate} ${this.getCurrentTime()}`,
-        carbs: 0,
-        prots: 0,
-        fats: 0,
-        kcals: 0,
-        products: []
-      });
-    },
-    getCurrentTime() {
-      return moment().format('HH:mm:ss');
-    }
   }
 }
 </script>
