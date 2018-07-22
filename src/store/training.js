@@ -123,11 +123,11 @@ const training = {
       return state.exercises.map((exercise, index) => ({
         ...exercise,
         exerciseKey: index,
-        duration: exercise.sets.reduce((duration, set) => duration += set.time + set.break, 0),
-        sets: exercise.sets.map(set => ({
-          ...set,
-          break: exercise.break ? exercise.break : set.break
-        }))
+        duration: exercise.sets.reduce((duration, set) => duration += set.time + set.break, 0)
+        // sets: exercise.sets.map(set => ({
+        //   ...set,
+        //   break: exercise.break ? exercise.break : set.break
+        // }))
       }));
     },
     datedOnTrainings: (state, getters) => {

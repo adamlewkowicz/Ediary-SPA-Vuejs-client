@@ -47,8 +47,8 @@ export default {
       loginMode: true,
       isLoading: false,
       loginData: {
-        email: '',
-        password: ''
+        email: 'testaccount',
+        password: 'envEirra'
       },
       registerData: {
         email: '',
@@ -56,10 +56,6 @@ export default {
         password2: ''
       },
       errors: [],
-      credentials: {
-        email: 'testaccount',
-        password: 'envEirra'
-      },
       formData: {
         elements: [
           {
@@ -90,18 +86,25 @@ export default {
   },
   methods: {
     login() {
-      if (Object.values(this.loginData).length.some(data => data.legnth < 4 || data.length > 20)) {
-        this.errors.push('Email oraz hasło muszą mieć minimum 4 a maksimum 20 znaków');
+      this.errors = [];
+      if (Object.values(this.loginData).some(data => data.length < 4 || data.length > 20)) {
+        this.errors.push('Email oraz hasło muszą mieć minimum 4 i maksimum 20 znaków');
       } else {
         this.isLoading = true;
-        this.$store.dispatch('login', this.loginData);
+        // TWO TIMES LOGIN REQUEST => PROPAGATE NOTIFICATIONS FROM STORE
+        axios.post(`/user/login`, this.loginData)
+          .then(res => this.$store.dispatch('login', this.loginData))
+          .catch(err => {
+            this.isLoading = false;
+            this.errors.push('Logowanie nieudane');
+          });
       }
     },
     register() {
       this.errors = [];
       const { email, password1, password2 } = this.registerData;
       if (Object.values(this.registerData).some(data => data.length < 4 || data.length > 20)) {
-        this.errors.push('Email oraz hasło muszą mieć minimum 4 a maksimum 20 znaków');
+        this.errors.push('Email oraz hasło muszą mieć minimum 4 i maksimum 20 znaków');
       } else if (password1 !== password2) {
         this.errors.push('Hasła muszą być identyczne');
       } else {

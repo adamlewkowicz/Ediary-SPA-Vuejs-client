@@ -36,9 +36,9 @@ export default {
   data() {
     return {
       userData: {
-        age: 23,
-        weight: 75,
-        height: 181,
+        age: 0,
+        weight: 0,
+        height: 0,
         man: null,
         weightGoal: 'maintain'
       },
