@@ -67,7 +67,6 @@ export default {
     background: linear-gradient(to right,rgba(137, 247, 254, .5), rgba(102, 166, 255, .5));
     background-size: 200% 200%;
     animation: bar 1s ease infinite;
-    // height: 40px;
   }
 }
 
