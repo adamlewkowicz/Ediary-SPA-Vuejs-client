@@ -91,14 +91,11 @@ export default {
   border-radius: 30px;
   padding: 16px;
   width: 200px;
-  // font-size: 16px;
   color: #fff;
   margin: 0 auto;
   margin-bottom: 20px;
   display: block;
   background-color: #1e90ff;
-  // background-color: #a55eea;
-  // background-color: #20bf6b;
 }
 
 h2 {
