@@ -8,7 +8,7 @@ const user = {
     token: null
   },
   mutations: {
-    UPDATE_STATE (state, payload) {
+    UPDATE_USER_STATE (state, payload) {
       for (let prop in payload) {
         state[prop] = payload[prop];
       }
@@ -16,12 +16,12 @@ const user = {
   },
   actions: {
     async login ({ commit }, payload) {
-      commit('UPDATE_STATE', { isLoggingIn: true });
+      commit('UPDATE_USER_STATE', { isLoggingIn: true });
       const postLogin = await axios.post(`/user/login`, payload);
       const authToken = `Bearer ${postLogin.data.token}`;
       localStorage.setItem('auth-token', authToken);
       axios.defaults.headers.common['Authorization'] = authToken;
-      commit('UPDATE_STATE', {
+      commit('UPDATE_USER_STATE', {
         ...postLogin.data,
         isLoggedIn: true,
         isLoggingIn: false
@@ -30,7 +30,7 @@ const user = {
     logout ({ commit }) {
       localStorage.removeItem('auth-token');
       axios.defaults.headers.common['Authorization'] = null;
-      commit('UPDATE_STATE', {
+      commit('UPDATE_USER_STATE', {
         isLoggedIn: false,
         token: null
       });

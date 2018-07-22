@@ -1,0 +1,7 @@
+{
+  "alias": "ediary",
+  "name": "ediary-spa",
+  "engines": {
+    "node": "7.4.0"
+  }
+}
