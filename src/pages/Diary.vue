@@ -11,8 +11,6 @@
       Brak posiłków w dniu: {{ pickedDate }}
     </p>
 
-
-
     <router-view v-else
       :todaysMeals="todaysMeals"
       :pickedDate="pickedDate"
