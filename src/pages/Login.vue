@@ -2,15 +2,41 @@
   <section>
     <article class="box">
       <header>
-        <h1>Logowanie</h1>
+        <u class="change-mode" @click="changeMode">
+          {{ loginMode ? 'Rejestracja' : 'Logowanie' }}
+        </u>
+        <template v-if="loginMode">
+          <h1>Logowanie</h1>
+          <label for="l-email">Email:</label>
+          <input type="text" v-model="loginData.email" id="l-email"/>
+          <label for="l-password">Hasło:</label>
+          <input type="password" v-model="loginData.password" id="l-password"/>
+          <button type="button" @click="login" class="login-submit">
+            Zaloguj się
+          </button>
+        </template>
+        <template v-else>
+          <h1>Rejestracja</h1>
+          <label for="r-email">Email:</label>
+          <input type="text" v-model="registerData.email" r="r-email"/>
+          <label for="r-password">Hasło:</label>
+          <input type="password" v-model="registerData.password1" id="r-password"/>
+          <label for="r-repeat">Hasło ponownie:</label>
+          <input type="password" v-model="registerData.password2" id="r-repeat"/>
+          <button type="button" @click="register" class="login-submit">
+            Zarejestruj się
+          </button>
+        </template>
+        <p v-for="(error, errorKey) in errors" :key="errorKey">
+          {{ error }}
+        </p>
       </header>
-      <button @click="login">CLICK</button>
-      <vue-form :formData="formData"/>
     </article>
   </section>
 </template>
 
 <script>
+import axios from 'axios';
 import VueForm from '@/components/VueForm';
 import Joi from 'joi';
 
@@ -18,10 +44,18 @@ export default {
   components: { VueForm },
   data() {
     return {
-      credentials: {
+      loginMode: true,
+      isLoading: false,
+      loginData: {
         email: 'testaccount',
         password: 'envEirra'
       },
+      registerData: {
+        email: '',
+        password1: '',
+        password2: ''
+      },
+      errors: [],
       formData: {
         elements: [
           {
@@ -52,14 +86,40 @@ export default {
   },
   methods: {
     login() {
-      // this.errors = [];
-      this.$store.dispatch('login', this.credentials);
-      // const loginVals = Object.values(this.credentials);
-      // if (loginVals.some(val => val.length < 4)) {
-      //   this.errors.push('Długość emaila i hasła musi być dłuższa niż 4');
-      // } else {
-      //   this.$store.dispatch('login', this.credentials);
-      // }
+      this.errors = [];
+      if (Object.values(this.loginData).some(data => data.length < 4 || data.length > 20)) {
+        this.errors.push('Email oraz hasło muszą mieć minimum 4 i maksimum 20 znaków');
+      } else {
+        this.isLoading = true;
+        // TWO TIMES LOGIN REQUEST => PROPAGATE NOTIFICATIONS FROM STORE
+        axios.post(`/user/login`, this.loginData)
+          .then(res => this.$store.dispatch('login', this.loginData))
+          .catch(err => {
+            this.isLoading = false;
+            this.errors.push('Logowanie nieudane');
+          });
+      }
+    },
+    register() {
+      this.errors = [];
+      const { email, password1, password2 } = this.registerData;
+      if (Object.values(this.registerData).some(data => data.length < 4 || data.length > 20)) {
+        this.errors.push('Email oraz hasło muszą mieć minimum 4 i maksimum 20 znaków');
+      } else if (password1 !== password2) {
+        this.errors.push('Hasła muszą być identyczne');
+      } else {
+        this.isLoading = true;
+        const credentials = { email, password: password2 };
+        axios.post(`/user/register`, credentials)
+          .then(res => this.$store.dispatch('login', credentials))
+          .catch(err => {
+            this.isLoading = false;
+            this.errors.push('Nieprawidłowe dane');
+          });
+      }
+    },
+    changeMode() {
+      if (!this.isLoading) this.loginMode = !this.loginMode;
     }
   },
   computed: {
@@ -76,12 +136,16 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 section {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+u:hover {
+  cursor: pointer;
 }
 
 .box {
@@ -91,8 +155,17 @@ section {
 }
 
 h1 {
-  margin: 0 0 35px 0;
+  margin: 7px 0 35px 0;
   font-size: 25px;
+  i {
+    font-style: normal;
+    font-size: 16px;
+    padding: 5px 0;
+  }
+}
+
+input {
+  @extend .text;
 }
 
 .login-submit {

@@ -3,7 +3,8 @@
     <div class="box">
       <div class="doughnut-chart-wrapper">
         <doughnut-chart
-          :options="{ responsive: true }"
+          :width="500"
+          :height="500"
           :chartData="chartData"
         />
       </div>
@@ -111,7 +112,7 @@ export default {
   margin-bottom: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-flow: row wrap;
   @include phone {
     flex-direction: column;
@@ -125,9 +126,11 @@ export default {
 
 .doughnut-chart-wrapper {
   width: 50%;
-  @include phone {
+  max-width: 500px;
+  max-height: 500px;
+  @include tablet {
     width: 100%;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
   }
 }
 
@@ -142,9 +145,13 @@ p {
 }
 
 .todays-macro-info {
+  margin: 10px 50px;
   h3 {
     text-align: center;
     margin: 0 0 30px 0;
+  }
+  @include phone {
+    margin: 0;
   }
 }
 
