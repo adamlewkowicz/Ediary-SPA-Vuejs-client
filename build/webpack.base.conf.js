@@ -8,6 +8,10 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
+exports.resolveLoader = {
+  root: path.join(__dirname, 'node_modules')
+};
+
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
